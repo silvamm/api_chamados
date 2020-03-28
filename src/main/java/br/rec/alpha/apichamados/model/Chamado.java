@@ -19,6 +19,7 @@ public class Chamado {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String protocolo;
 	@ManyToOne
 	private ChamadoPreDefinido preDefinida;
 	private String descricao;

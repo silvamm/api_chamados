@@ -1,6 +1,7 @@
 package br.rec.alpha.apichamados.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,19 +13,18 @@ import br.rec.alpha.apichamados.repository.UsuarioRepository;
 public class UsuarioService {
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioRepository repo;
 	
 	public List<Usuario> listAll(){
-		return usuarioRepository.findAll();
+		return repo.findAll();
 	}
 	
-	public Usuario findById(Long idUsuario) {
-		return usuarioRepository.getOne(idUsuario);
+	public Optional<Usuario> findById(Long id) {
+		return repo.findById(id);
 	}
 	
-	public void save(Usuario usuario) {
-		usuarioRepository.save(usuario);
+	public Usuario save(Usuario usuario) {
+		return repo.save(usuario);
 	}
-	
 
 }
