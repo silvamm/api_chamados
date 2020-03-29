@@ -1,0 +1,23 @@
+= Sample API Documentation
+Matheus Monteiro<silvammclio@gmail.com>
+1.0.0, 29/03/2020
+:toc: left
+:sectnums:
+
+== Introduction
+This is an example of Spring REST Docs generated documentation.
+
+== Usuario API
+Collection of CRUD API endpoints used to manipulate persons registered in the application.
+
+=== Get
+Obtains a specific person registered in the application by its unique identifier.
+
+==== Sample Request
+include::{snippets}/usuario/get/http-request.adoc[]
+
+==== Sample Response
+include::{snippets}/usuario/get/http-response.adoc[]
+
+==== CURL sample
+include::{snippets}/usuario/get/curl-request.adoc[]
