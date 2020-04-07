@@ -2,6 +2,11 @@ package br.rec.alpha.apichamados;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -10,35 +15,54 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.rec.alpha.apichamados.enumm.TipoUsuarioEnum;
+import br.rec.alpha.apichamados.model.Setor;
 import br.rec.alpha.apichamados.model.Usuario;
 import br.rec.alpha.apichamados.repository.UsuarioRepository;
 import br.rec.alpha.apichamados.service.UsuarioService;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class})
 public class UsuarioRestControllerTest {
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@MockBean
 	private UsuarioService service;
@@ -47,34 +71,181 @@ public class UsuarioRestControllerTest {
 	private WebApplicationContext context;
 
 	private MockMvc mockMvc;
+	
+	private Usuario usuario;
 
 	@BeforeEach
 	public void setUp(RestDocumentationContextProvider restDocumentation) {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-				.apply(documentationConfiguration(restDocumentation))
+		
+		mockMvc = MockMvcBuilders.webAppContextSetup(context)
+				.apply(documentationConfiguration(restDocumentation).uris()
+		                .withScheme("http")
+		                .withHost("softrec.com.br")
+		                .withPort(8080))
 				.build();
+		
+	 	usuario = new Usuario();
+    	usuario.setId(1L);
+    	usuario.setNome("Teste");
+    	usuario.setEmail("teste@email.com.br");
+    	usuario.setSenha("senha");
+    	usuario.setTipo(TipoUsuarioEnum.ADMINISTRADOR);
+    	
+    	Setor setor = new Setor();
+    	setor.setId(1L);
+    	setor.setNome("Teste");
+    	
+    	usuario.setSetor(setor);
+    	
+		given(service.findById(usuario.getId())).willReturn(Optional.of(usuario));
+	}
+	
+	private FieldDescriptor[] getDescricaoDosAtributosDoUsuario() {
+	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
+	                fieldWithPath("email").description("O e-mail do usuário").type(JsonFieldType.STRING),
+	                fieldWithPath("senha").description("A senha do usuário. Sempre retornado null").optional().type(JsonFieldType.STRING),
+	                fieldWithPath("nome").description("O nome do usuário").type(JsonFieldType.STRING),
+	                subsectionWithPath("setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
+	                fieldWithPath("tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
+	    };
+	}
+	
+	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDeUsuarios() {
+	    return new FieldDescriptor[]{
+	    			fieldWithPath("[]").description("Lista de usuários").type(JsonFieldType.ARRAY),
+	    			subsectionWithPath("[].id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
+	    			subsectionWithPath("[].email").description("O e-mail do usuário").type(JsonFieldType.STRING),
+	                subsectionWithPath("[].senha").description("A senha do usuário. Sempre retornado null").optional().type(JsonFieldType.STRING),
+	                subsectionWithPath("[].nome").description("O nome do usuário").type(JsonFieldType.STRING),
+	                subsectionWithPath("[].setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
+	                subsectionWithPath("[].tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
+	    };
+	}
+	
+	@Test
+	public void list() throws Exception {
+
+		Setor setor2 = new Setor();
+		setor2.setId(2L);
+		setor2.setNome("Teste 2");
+		
+		Usuario usuario2 = new Usuario();
+		usuario2.setId(2L);
+		usuario2.setNome("Teste 2");
+		usuario2.setEmail("teste2@alpha.com.br");
+		usuario2.setTipo(TipoUsuarioEnum.NORMAL);
+		usuario2.setSetor(setor2);
+		
+		List<Usuario> usuarios = new ArrayList<>();
+		usuarios.add(usuario);
+		usuarios.add(usuario2);
+		
+		given(service.listAll()).willReturn(usuarios);
+		
+	   mockMvc.perform(
+    		RestDocumentationRequestBuilders
+                .get("/usuario/"))
+        		.andExpect(status().isOk())
+	    		.andExpect(content().contentType("application/json"))
+	    		.andDo(document("usuario/list", 
+	    				preprocessRequest(prettyPrint()),
+	    				preprocessResponse(prettyPrint()),
+	    				responseFields(getDescricaoDosAtributosDeUmaListaDeUsuarios())));
+		
+	}
+	
+    @Test
+    public void update() throws Exception {
+    	
+    	usuario.setNome("Teste Atualizado");
+    	
+		given(service.save(usuario)).willReturn(usuario);
+
+        mockMvc.perform(
+    		RestDocumentationRequestBuilders
+                .put("/usuario/{id}", 1)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(usuario)))
+        		.andExpect(status().isOk())
+        		.andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.nome", is("Teste Atualizado")))
+	    		.andExpect(content().contentType("application/json"))
+	    		.andDo(document("usuario/update", 
+	    				preprocessRequest(prettyPrint()),
+	    				preprocessResponse(prettyPrint())));
+    }
+	
+	@Test
+	public void create() throws JsonProcessingException, Exception {
+		
+		Usuario novoUsuario = new Usuario();
+		novoUsuario.setNome("Teste");
+		novoUsuario.setEmail("teste@alpha.com.br");
+		novoUsuario.setSenha("senha");
+		novoUsuario.setTipo(TipoUsuarioEnum.ADMINISTRADOR);
+		
+		Setor setor = new Setor();
+		setor.setId(1L);
+		setor.setNome("Teste");
+		
+		novoUsuario.setSetor(setor);
+
+		Usuario salvo = new Usuario();
+		salvo.setId(1L);
+		salvo.setNome("Teste");
+		salvo.setEmail("teste@alpha.com.br");
+		salvo.setTipo(TipoUsuarioEnum.ADMINISTRADOR);
+		salvo.setSetor(setor);
+		
+		given(service.save(novoUsuario)).willReturn(salvo);
+
+	    mockMvc.perform(
+    		RestDocumentationRequestBuilders
+	    		.post("/usuario/").contentType("application/json")
+			    .content(this.objectMapper.writeValueAsString(novoUsuario)))
+	    		.andExpect(status().isOk())
+	    		.andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.nome", is("Teste")))
+	    		.andExpect(content().contentType("application/json"))
+	    		.andDo(document("usuario/create", 
+	    				preprocessRequest(prettyPrint()),
+	    				preprocessResponse(prettyPrint())));
+		
 	}
 
 	@Test
-	public void getTest() throws Exception {
+	public void get() throws Exception {
 		
-		Usuario usuario = new Usuario();
-		usuario.setId(1L);
-		usuario.setNome("Teste");
+		mockMvc.perform(
+			RestDocumentationRequestBuilders
+			.get("/usuario/{id}", 1))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id", is(1)))
+			.andExpect(jsonPath("$.nome", is("Teste")))
+			.andExpect(content().contentType("application/json"))
+			.andDo(document("usuario/get",
+					preprocessRequest(prettyPrint()),
+					preprocessResponse(prettyPrint()),
+					 pathParameters(parameterWithName("id").description("O id do usuário a ser encontrado")),
+					 	responseFields(getDescricaoDosAtributosDoUsuario())
+					 	)
+					);
+	}
+	
+	@Test
+	public void delete() throws Exception {
 		
-		given(service.findById(usuario.getId())).willReturn(Optional.of(usuario));
+		mockMvc.perform(
+			RestDocumentationRequestBuilders
+			.delete("/usuario/{id}", 1))
+			.andExpect(status().isOk())
+			.andDo(document("usuario/delete",
+					preprocessRequest(prettyPrint()),
+					preprocessResponse(prettyPrint()),
+					 pathParameters(
+				        parameterWithName("id").description("O id do usuário a ser deletado")
+					      )));
 		
-		this.mockMvc.perform(
-				RestDocumentationRequestBuilders
-				.get("/usuario/{id}", 1))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id", is(1)))
-				.andExpect(jsonPath("$.nome", is("Teste")))
-				.andExpect(content()
-				.contentType("application/json"))
-				.andDo(document("usuario/get",
-						//preprocessRequest(removeHeaders("Foo")),
-						preprocessResponse(prettyPrint())));
 	}
 
 }

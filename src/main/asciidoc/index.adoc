@@ -1,23 +1,85 @@
-= Sample API Documentation
-Matheus Monteiro<silvammclio@gmail.com>
-1.0.0, 29/03/2020
-:toc: left
+= AlphaChamados API - Documentação
+Matheus Monteiro <silvammclio@gmail.com>;
+1.0, 29/03/2020
 :sectnums:
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toc-title: Index
+:toclevels: 2
+:sectlinks:
 
-== Introduction
-This is an example of Spring REST Docs generated documentation.
+== Introdução
+Essa API tem por objetivo ser uma interface para gerenciar os dados que alimentam a plataforma System Call, responsável pelos chamados da faculdade Alpha.
 
-== Usuario API
-Collection of CRUD API endpoints used to manipulate persons registered in the application.
+== Usuário API
+Lista de endpoints para o gerenciamento de usuários no System Call.
 
-=== Get
-Obtains a specific person registered in the application by its unique identifier.
+=== Get - Por id
+Obter um usuário específico pelo identificador único.
 
-==== Sample Request
+==== Exemplo de Requisição
 include::{snippets}/usuario/get/http-request.adoc[]
 
-==== Sample Response
+==== Parâmetros da Requisição
+include::{snippets}/usuario/get/path-parameters.adoc[]
+
+==== Exemplo de Resposta
 include::{snippets}/usuario/get/http-response.adoc[]
 
-==== CURL sample
+==== Campos da Resposta
+include::{snippets}/usuario/get/response-fields.adoc[]
+
+==== Exemplo CURL
 include::{snippets}/usuario/get/curl-request.adoc[]
+
+=== Get - Todos
+
+==== Exemplo de Requisição
+include::{snippets}/usuario/list/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/usuario/list/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/usuario/list/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/usuario/list/curl-request.adoc[]
+
+=== Post
+Criar um usuário para o sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/usuario/create/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/usuario/create/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/usuario/create/curl-request.adoc[]
+
+=== Put
+Editar um usuário pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/usuario/update/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/usuario/update/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/usuario/update/curl-request.adoc[]
+
+=== Delete
+Deletar um usuário específico pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/usuario/delete/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/usuario/delete/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/usuario/delete/curl-request.adoc[]
