@@ -21,7 +21,7 @@ public class Chamado {
 	private Long id;
 	private String protocolo;
 	@ManyToOne
-	private ChamadoPreDefinido preDefinida;
+	private ChamadoPredefinido preDefinida;
 	private String descricao;
 	private StatusChamadoEnum status;
 	private PrioridadeChamadosEnum prioridade;

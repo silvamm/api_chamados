@@ -13,37 +13,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.rec.alpha.apichamados.model.ChamadoPreDefinido;
-import br.rec.alpha.apichamados.service.ChamadoPreDefinidosService;
+import br.rec.alpha.apichamados.model.ChamadoPredefinido;
+import br.rec.alpha.apichamados.service.ChamadoPredefinidosService;
 
 @RestController
 @RequestMapping("/chamadopredefinido")
-public class ChamadoPreDefinidoRestController {
+public class ChamadoPredefinidoRestController {
 	
 	@Autowired
-	private ChamadoPreDefinidosService service;
+	private ChamadoPredefinidosService service;
 	
 	@GetMapping("/")
-	public List<ChamadoPreDefinido> listar(){
+	public List<ChamadoPredefinido> listar(){
 		return service.listAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ChamadoPreDefinido> get(@PathVariable Long id) {
+	public ResponseEntity<ChamadoPredefinido> get(@PathVariable Long id) {
 		return ResponseEntity.of(service.findById(id));
 	}
 	
 	@PostMapping("/")
-	public ChamadoPreDefinido criar(@RequestBody ChamadoPreDefinido definicao) {
+	public ChamadoPredefinido criar(@RequestBody ChamadoPredefinido definicao) {
 		return service.save(definicao);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ChamadoPreDefinido> editar(@PathVariable Long id, @RequestBody ChamadoPreDefinido definicao) {
+	public ResponseEntity<ChamadoPredefinido> editar(@PathVariable Long id, @RequestBody ChamadoPredefinido definicao) {
 		return service.findById(id)
 				.map(registro -> {
 					definicao.setId(registro.getId());
-					ChamadoPreDefinido atualizado = service.save(definicao);
+					ChamadoPredefinido atualizado = service.save(definicao);
 					return ResponseEntity.ok(atualizado);
 				}).orElse(ResponseEntity.notFound().build());
 		

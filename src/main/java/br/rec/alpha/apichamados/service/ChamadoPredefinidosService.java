@@ -6,24 +6,24 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.rec.alpha.apichamados.model.ChamadoPreDefinido;
-import br.rec.alpha.apichamados.repository.ChamadoPreDefinidoRepository;
+import br.rec.alpha.apichamados.model.ChamadoPredefinido;
+import br.rec.alpha.apichamados.repository.ChamadoPredefinidoRepository;
 
 @Service
-public class ChamadoPreDefinidosService {
+public class ChamadoPredefinidosService {
 	
 	@Autowired
-	private ChamadoPreDefinidoRepository repo;
+	private ChamadoPredefinidoRepository repo;
 	
-	public List<ChamadoPreDefinido> listAll(){
+	public List<ChamadoPredefinido> listAll(){
 		return repo.findAll();
 	}
 	
-	public Optional<ChamadoPreDefinido> findById(Long id) {
+	public Optional<ChamadoPredefinido> findById(Long id) {
 		return repo.findById(id);
 	}
 	
-	public ChamadoPreDefinido save(ChamadoPreDefinido definicao) {
+	public ChamadoPredefinido save(ChamadoPredefinido definicao) {
 		return repo.save(definicao);
 	}
 	

@@ -43,12 +43,12 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.rec.alpha.apichamados.model.ChamadoPreDefinido;
-import br.rec.alpha.apichamados.service.ChamadoPreDefinidosService;
+import br.rec.alpha.apichamados.model.ChamadoPredefinido;
+import br.rec.alpha.apichamados.service.ChamadoPredefinidosService;
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class})
-public class ChamadosPreDefinidosRestControllerTest {
+public class ChamadosPredefinidosRestControllerTest {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -59,9 +59,9 @@ public class ChamadosPreDefinidosRestControllerTest {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private ChamadoPreDefinidosService service;
+	private ChamadoPredefinidosService service;
 	
-	private ChamadoPreDefinido definicao;
+	private ChamadoPredefinido definicao;
 	
 	@BeforeEach
 	public void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -73,7 +73,7 @@ public class ChamadosPreDefinidosRestControllerTest {
 		                .withPort(8080))
 				.build();
 		
-		definicao = new ChamadoPreDefinido();
+		definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
 		definicao.setNome("Teste");
     	
@@ -97,11 +97,11 @@ public class ChamadosPreDefinidosRestControllerTest {
 	@Test
 	public void list() throws Exception {
 
-		ChamadoPreDefinido definicao2 = new ChamadoPreDefinido();
+		ChamadoPredefinido definicao2 = new ChamadoPredefinido();
 		definicao2.setId(2L);
 		definicao2.setNome("Teste 2");
 		
-		List<ChamadoPreDefinido> definicoes = new ArrayList<>();
+		List<ChamadoPredefinido> definicoes = new ArrayList<>();
 		definicoes.add(definicao);
 		definicoes.add(definicao2);
 		
@@ -143,10 +143,10 @@ public class ChamadosPreDefinidosRestControllerTest {
 	@Test
 	public void create() throws JsonProcessingException, Exception {
 		
-		ChamadoPreDefinido novaDefinicao = new ChamadoPreDefinido();
+		ChamadoPredefinido novaDefinicao = new ChamadoPredefinido();
 		novaDefinicao.setNome("Teste");
 
-		ChamadoPreDefinido salvo = new ChamadoPreDefinido();
+		ChamadoPredefinido salvo = new ChamadoPredefinido();
 		salvo.setId(1L);
 		salvo.setNome("Teste");
 		

@@ -43,7 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.rec.alpha.apichamados.enumm.PrioridadeChamadosEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import br.rec.alpha.apichamados.model.Chamado;
-import br.rec.alpha.apichamados.model.ChamadoPreDefinido;
+import br.rec.alpha.apichamados.model.ChamadoPredefinido;
 import br.rec.alpha.apichamados.model.Usuario;
 import br.rec.alpha.apichamados.service.ChamadoService;
 
@@ -83,7 +83,7 @@ public class ChamadoRestControllerTest {
 		chamado.setStatus(StatusChamadoEnum.PENDENTE);
 		chamado.setPrioridade(PrioridadeChamadosEnum.NORMAL);
 		
-		ChamadoPreDefinido definicao = new ChamadoPreDefinido();
+		ChamadoPredefinido definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
 		chamado.setPreDefinida(definicao);
 		
@@ -137,7 +137,7 @@ public class ChamadoRestControllerTest {
 		chamado2.setStatus(StatusChamadoEnum.VISUALIZADO);
 		chamado2.setPrioridade(PrioridadeChamadosEnum.URGENTE);
 		
-		ChamadoPreDefinido definicao = new ChamadoPreDefinido();
+		ChamadoPredefinido definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
 		chamado2.setPreDefinida(definicao);
 		
@@ -190,7 +190,7 @@ public class ChamadoRestControllerTest {
 		Chamado novoChamado = new Chamado();
 		chamado.setDescricao("Descrição");
 		
-		ChamadoPreDefinido definicao = new ChamadoPreDefinido();
+		ChamadoPredefinido definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
 		chamado.setPreDefinida(definicao);
 		
