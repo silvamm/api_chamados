@@ -36,6 +36,8 @@ include::{snippets}/usuario/get/curl-request.adoc[]
 
 === Get - Todos
 
+Obter todos os usuários do sistema.
+
 ==== Exemplo de Requisição
 include::{snippets}/usuario/list/http-request.adoc[]
 
@@ -83,3 +85,272 @@ include::{snippets}/usuario/delete/http-response.adoc[]
 
 ==== Exemplo CURL
 include::{snippets}/usuario/delete/curl-request.adoc[]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+== Setor API
+Lista de endpoints para o gerenciamento de setores no System Call.
+
+=== Get - Por id
+Obter um setor específico pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/setor/get/http-request.adoc[]
+
+==== Parâmetros da Requisição
+include::{snippets}/setor/get/path-parameters.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/setor/get/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/setor/get/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/setor/get/curl-request.adoc[]
+
+=== Get - Todos
+
+Obter todos os setores do sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/setor/list/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/setor/list/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/setor/list/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/setor/list/curl-request.adoc[]
+
+=== Post
+Criar um setor para o sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/setor/create/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/setor/create/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/setor/create/curl-request.adoc[]
+
+=== Put
+Editar um setor pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/setor/update/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/setor/update/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/setor/update/curl-request.adoc[]
+
+=== Delete
+Deletar um setor específico pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/setor/delete/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/setor/delete/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/setor/delete/curl-request.adoc[]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+== Chamados Predefinidos API
+Lista de endpoints para o gerenciamento de chamados predefinidos / definições no System Call.
+
+=== Get - Por id
+Obter um chamado predefinido específico pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/definicao/get/http-request.adoc[]
+
+==== Parâmetros da Requisição
+include::{snippets}/definicao/get/path-parameters.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/definicao/get/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/definicao/get/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/definicao/get/curl-request.adoc[]
+
+=== Get - Todos
+
+Obter todos os chamados predefinicos do sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/definicao/list/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/definicao/list/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/definicao/list/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/definicao/list/curl-request.adoc[]
+
+=== Post
+Criar um chamado predefinido para o sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/definicao/create/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/definicao/create/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/definicao/create/curl-request.adoc[]
+
+=== Put
+Editar um chamado predefinido pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/definicao/update/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/definicao/update/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/definicao/update/curl-request.adoc[]
+
+=== Delete
+Deletar um chamado predefinido específico pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/definicao/delete/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/definicao/delete/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/definicao/delete/curl-request.adoc[]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+== Chamados API
+Lista de endpoints para o gerenciamento de chamados no System Call.
+
+=== Get - Por id
+Obter um chamado  pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/chamado/get/http-request.adoc[]
+
+==== Parâmetros da Requisição
+include::{snippets}/chamado/get/path-parameters.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/chamado/get/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/chamado/get/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/chamado/get/curl-request.adoc[]
+
+=== Get - Todos
+
+Obter todos os chamados do sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/chamado/list/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/chamado/list/http-response.adoc[]
+
+==== Campos da Resposta
+include::{snippets}/chamado/list/response-fields.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/chamado/list/curl-request.adoc[]
+
+=== Post
+Criar um chamado para o sistema.
+
+==== Exemplo de Requisição
+include::{snippets}/chamado/create/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/chamado/create/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/chamado/create/curl-request.adoc[]
+
+=== Put
+Editar um chamado  pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/chamado/update/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/chamado/update/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/chamado/update/curl-request.adoc[]
+
+=== Delete
+Deletar um chamado específico pelo identificador único.
+
+==== Exemplo de Requisição
+include::{snippets}/chamado/delete/http-request.adoc[]
+
+==== Exemplo de Resposta
+include::{snippets}/chamado/delete/http-response.adoc[]
+
+==== Exemplo CURL
+include::{snippets}/chamado/delete/curl-request.adoc[]
+
+
+

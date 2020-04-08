@@ -26,5 +26,9 @@ public class SetorService {
 	public Setor save(Setor setor) {
 		return repo.save(setor);
 	}
+	
+	public void delete(Long id) {
+		repo.deleteById(id);
+	}
 
 }

@@ -27,8 +27,8 @@ public class UsuarioService {
 		return repo.save(usuario);
 	}
 	
-	public void delete(Long idUsuario) {
-		repo.deleteById(idUsuario);
+	public void delete(Long id) {
+		repo.deleteById(id);
 	}
 
 }

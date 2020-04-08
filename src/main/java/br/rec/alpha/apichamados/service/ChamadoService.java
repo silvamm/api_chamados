@@ -26,5 +26,9 @@ public class ChamadoService {
 	public Chamado save(Chamado chamado) {
 		return repo.save(chamado);
 	}
+	
+	public void delete(Long id) {
+		repo.deleteById(id);
+	}
 
 }

@@ -26,7 +26,7 @@ public class Chamado {
 	private StatusChamadoEnum status;
 	private PrioridadeChamadosEnum prioridade;
 	private LocalDateTime dataCriacao;
-	private LocalDateTime dataEnceramento;
+	private LocalDateTime dataEncerramento;
 	@ManyToOne
 	private Usuario criadoPor;
 

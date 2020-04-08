@@ -19,12 +19,16 @@ public class ChamadoPreDefinidosService {
 		return repo.findAll();
 	}
 	
+	public Optional<ChamadoPreDefinido> findById(Long id) {
+		return repo.findById(id);
+	}
+	
 	public ChamadoPreDefinido save(ChamadoPreDefinido definicao) {
 		return repo.save(definicao);
 	}
 	
-	public Optional<ChamadoPreDefinido> findById(Long id) {
-		return repo.findById(id);
+	public void delete(Long id) {
+		repo.deleteById(id);
 	}
 
 }

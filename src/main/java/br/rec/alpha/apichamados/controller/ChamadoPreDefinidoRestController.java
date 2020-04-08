@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +38,7 @@ public class ChamadoPreDefinidoRestController {
 		return service.save(definicao);
 	}
 	
+	@PutMapping("/{id}")
 	public ResponseEntity<ChamadoPreDefinido> editar(@PathVariable Long id, @RequestBody ChamadoPreDefinido definicao) {
 		return service.findById(id)
 				.map(registro -> {
@@ -44,5 +47,10 @@ public class ChamadoPreDefinidoRestController {
 					return ResponseEntity.ok(atualizado);
 				}).orElse(ResponseEntity.notFound().build());
 		
+	}
+	
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
+		service.delete(id);
 	}
 }
