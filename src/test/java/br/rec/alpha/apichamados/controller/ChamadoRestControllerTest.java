@@ -1,4 +1,4 @@
-package br.rec.alpha.apichamados;
+package br.rec.alpha.apichamados.controller;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;

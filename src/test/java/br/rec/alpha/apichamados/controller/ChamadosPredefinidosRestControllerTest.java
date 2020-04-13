@@ -1,4 +1,4 @@
-package br.rec.alpha.apichamados;
+package br.rec.alpha.apichamados.controller;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -13,15 +13,16 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,12 +43,12 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.rec.alpha.apichamados.model.Setor;
-import br.rec.alpha.apichamados.service.SetorService;
+import br.rec.alpha.apichamados.model.ChamadoPredefinido;
+import br.rec.alpha.apichamados.service.ChamadoPredefinidosService;
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class})
-public class SetorRestControllerTest {
+public class ChamadosPredefinidosRestControllerTest {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -58,9 +59,9 @@ public class SetorRestControllerTest {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private SetorService service;
+	private ChamadoPredefinidosService service;
 	
-	private Setor setor;
+	private ChamadoPredefinido definicao;
 	
 	@BeforeEach
 	public void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -72,69 +73,69 @@ public class SetorRestControllerTest {
 		                .withPort(8080))
 				.build();
 		
-    	setor = new Setor();
-    	setor.setId(1L);
-    	setor.setNome("Teste");
+		definicao = new ChamadoPredefinido();
+		definicao.setId(1L);
+		definicao.setNome("Teste");
     	
-		given(service.findById(setor.getId())).willReturn(Optional.of(setor));
+		given(service.findById(definicao.getId())).willReturn(Optional.of(definicao));
 	}
 	
-	private FieldDescriptor[] getDescricaoDosAtributosDoSetor() {
-	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único do setor").type(JsonFieldType.NUMBER),
-	                fieldWithPath("nome").description("O nome do setor").type(JsonFieldType.STRING),
+	private FieldDescriptor[] getDescricaoDosAtributosDaDefinicao() {
+	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único da definição").type(JsonFieldType.NUMBER),
+	                fieldWithPath("nome").description("O nome da definição").type(JsonFieldType.STRING),
 	    };
 	}
 	
-	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDeSetores() {
+	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDasDefinicoes() {
 	    return new FieldDescriptor[]{
-	    			fieldWithPath("[]").description("Lista de setores").type(JsonFieldType.ARRAY),
-	    			subsectionWithPath("[].id").description("O identificador único do setor").type(JsonFieldType.NUMBER),
-	                subsectionWithPath("[].nome").description("O nome do setor").type(JsonFieldType.STRING),
+	    			fieldWithPath("[]").description("Lista de Definições").type(JsonFieldType.ARRAY),
+	    			subsectionWithPath("[].id").description("O identificador único da definição").type(JsonFieldType.NUMBER),
+	                subsectionWithPath("[].nome").description("O nome da definição").type(JsonFieldType.STRING),
 	    };
 	}
 	
 	@Test
 	public void list() throws Exception {
 
-		Setor setor2 = new Setor();
-		setor2.setId(2L);
-		setor2.setNome("Teste 2");
+		ChamadoPredefinido definicao2 = new ChamadoPredefinido();
+		definicao2.setId(2L);
+		definicao2.setNome("Teste 2");
 		
-		List<Setor> setores = new ArrayList<>();
-		setores.add(setor);
-		setores.add(setor2);
+		List<ChamadoPredefinido> definicoes = new ArrayList<>();
+		definicoes.add(definicao);
+		definicoes.add(definicao2);
 		
-		given(service.listAll()).willReturn(setores);
+		given(service.listAll()).willReturn(definicoes);
 		
 	   mockMvc.perform(
     		RestDocumentationRequestBuilders
-                .get("/setor/"))
+                .get("/chamadopredefinido/"))
         		.andExpect(status().isOk())
 	    		.andExpect(content().contentType("application/json"))
-	    		.andDo(document("setor/list", 
+	    		.andDo(document("definicao/list", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint()),
-	    				responseFields(getDescricaoDosAtributosDeUmaListaDeSetores())));
+	    				responseFields(getDescricaoDosAtributosDeUmaListaDasDefinicoes())));
 		
 	}
 	
     @Test
     public void update() throws Exception {
     	
-    	setor.setNome("Teste Atualizado");
+    	definicao.setNome("Teste Atualizado");
     	
-		given(service.save(setor)).willReturn(setor);
+		given(service.save(definicao)).willReturn(definicao);
 
         mockMvc.perform(
     		RestDocumentationRequestBuilders
-                .put("/setor/{id}", 1)
+                .put("/chamadopredefinido/{id}", 1)
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(setor)))
+                .content(objectMapper.writeValueAsString(definicao)))
         		.andExpect(status().isOk())
         		.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.nome", is("Teste Atualizado")))
 	    		.andExpect(content().contentType("application/json"))
-	    		.andDo(document("setor/update", 
+	    		.andDo(document("definicao/update", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint())));
     }
@@ -142,24 +143,24 @@ public class SetorRestControllerTest {
 	@Test
 	public void create() throws JsonProcessingException, Exception {
 		
-		Setor novoSetor = new Setor();
-		novoSetor.setNome("Teste");
+		ChamadoPredefinido novaDefinicao = new ChamadoPredefinido();
+		novaDefinicao.setNome("Teste");
 
-		Setor salvo = new Setor();
+		ChamadoPredefinido salvo = new ChamadoPredefinido();
 		salvo.setId(1L);
 		salvo.setNome("Teste");
 		
-		given(service.save(novoSetor)).willReturn(salvo);
+		given(service.save(novaDefinicao)).willReturn(salvo);
 
 	    mockMvc.perform(
     		RestDocumentationRequestBuilders
-	    		.post("/setor/").contentType("application/json")
-			    .content(this.objectMapper.writeValueAsString(novoSetor)))
+	    		.post("/chamadopredefinido/").contentType("application/json")
+			    .content(this.objectMapper.writeValueAsString(novaDefinicao)))
 	    		.andExpect(status().isOk())
 	    		.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.nome", is("Teste")))
 	    		.andExpect(content().contentType("application/json"))
-	    		.andDo(document("setor/create", 
+	    		.andDo(document("definicao/create", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint())));
 		
@@ -170,16 +171,16 @@ public class SetorRestControllerTest {
 		
 		mockMvc.perform(
 			RestDocumentationRequestBuilders
-			.get("/setor/{id}", 1))
+			.get("/chamadopredefinido/{id}", 1))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(1)))
 			.andExpect(jsonPath("$.nome", is("Teste")))
 			.andExpect(content().contentType("application/json"))
-			.andDo(document("setor/get",
+			.andDo(document("definicao/get",
 					preprocessRequest(prettyPrint()),
 					preprocessResponse(prettyPrint()),
-					 pathParameters(parameterWithName("id").description("O id do setor a ser encontrado")),
-					 	responseFields(getDescricaoDosAtributosDoSetor())
+					 pathParameters(parameterWithName("id").description("O id da definição a ser encontrada")),
+					 	responseFields(getDescricaoDosAtributosDaDefinicao())
 					 	)
 					);
 	}
@@ -189,13 +190,13 @@ public class SetorRestControllerTest {
 		
 		mockMvc.perform(
 			RestDocumentationRequestBuilders
-			.delete("/setor/{id}", 1))
+			.delete("/chamadopredefinido/{id}", 1))
 			.andExpect(status().isOk())
-			.andDo(document("setor/delete",
+			.andDo(document("definicao/delete",
 					preprocessRequest(prettyPrint()),
 					preprocessResponse(prettyPrint()),
 					 pathParameters(
-				        parameterWithName("id").description("O id do setor a ser deletado")
+				        parameterWithName("id").description("O id da definição a ser deletada")
 					      )));
 		
 	}
