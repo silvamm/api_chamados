@@ -3,6 +3,7 @@ package br.rec.alpha.apichamados.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,17 @@ public class UsuarioService {
 		return repo.findAll();
 	}
 	
+	public Optional<Usuario> findByEmail(String email){
+		return repo.findByEmail(email);
+	}
+	
 	public Optional<Usuario> findById(Long id) {
 		return repo.findById(id);
 	}
 	
 	public Usuario save(Usuario usuario) {
+		String encrpyt = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+		usuario.setSenha(encrpyt);
 		return repo.save(usuario);
 	}
 	
