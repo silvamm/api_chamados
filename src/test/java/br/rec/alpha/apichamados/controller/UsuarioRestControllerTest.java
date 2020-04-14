@@ -1,5 +1,6 @@
 package br.rec.alpha.apichamados.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -29,13 +30,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -47,8 +52,14 @@ import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 import br.rec.alpha.apichamados.enumm.TipoUsuarioEnum;
 import br.rec.alpha.apichamados.model.Setor;
@@ -86,8 +97,8 @@ public class UsuarioRestControllerTest {
 	 	usuario = new Usuario();
     	usuario.setId(1L);
     	usuario.setNome("Teste");
-    	usuario.setEmail("teste@email.com.br");
     	usuario.setSenha("senha");
+    	usuario.setEmail("teste@email.com.br");
     	usuario.setTipo(TipoUsuarioEnum.ADMINISTRADOR);
     	
     	Setor setor = new Setor();
@@ -102,7 +113,7 @@ public class UsuarioRestControllerTest {
 	private FieldDescriptor[] getDescricaoDosAtributosDoUsuario() {
 	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
 	                fieldWithPath("email").description("O e-mail do usuário").type(JsonFieldType.STRING),
-	                fieldWithPath("senha").description("A senha do usuário. Sempre retornado null").optional().type(JsonFieldType.STRING),
+	                fieldWithPath("senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
 	                fieldWithPath("nome").description("O nome do usuário").type(JsonFieldType.STRING),
 	                subsectionWithPath("setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
 	                fieldWithPath("tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
@@ -114,7 +125,7 @@ public class UsuarioRestControllerTest {
 	    			fieldWithPath("[]").description("Lista de usuários").type(JsonFieldType.ARRAY),
 	    			subsectionWithPath("[].id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
 	    			subsectionWithPath("[].email").description("O e-mail do usuário").type(JsonFieldType.STRING),
-	                subsectionWithPath("[].senha").description("A senha do usuário. Sempre retornado null").optional().type(JsonFieldType.STRING),
+	                subsectionWithPath("[].senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
 	                subsectionWithPath("[].nome").description("O nome do usuário").type(JsonFieldType.STRING),
 	                subsectionWithPath("[].setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
 	                subsectionWithPath("[].tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
@@ -131,6 +142,7 @@ public class UsuarioRestControllerTest {
 		Usuario usuario2 = new Usuario();
 		usuario2.setId(2L);
 		usuario2.setNome("Teste 2");
+		usuario2.setSenha("senha2");
 		usuario2.setEmail("teste2@alpha.com.br");
 		usuario2.setTipo(TipoUsuarioEnum.NORMAL);
 		usuario2.setSetor(setor2);
@@ -168,47 +180,50 @@ public class UsuarioRestControllerTest {
         		.andExpect(status().isOk())
         		.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.nome", is("Teste Atualizado")))
+				.andExpect(jsonPath("$.senha").doesNotExist())
 	    		.andExpect(content().contentType("application/json"))
 	    		.andDo(document("usuario/update", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint())));
+        
     }
 	
 	@Test
 	public void create() throws JsonProcessingException, Exception {
+		
+		Setor setor = new Setor();
+		setor.setId(1L);
 		
 		Usuario novoUsuario = new Usuario();
 		novoUsuario.setNome("Teste");
 		novoUsuario.setEmail("teste@alpha.com.br");
 		novoUsuario.setSenha("senha");
 		novoUsuario.setTipo(TipoUsuarioEnum.ADMINISTRADOR);
-		
-		Setor setor = new Setor();
-		setor.setId(1L);
-		setor.setNome("Teste");
-		
 		novoUsuario.setSetor(setor);
-
+		
 		Usuario salvo = new Usuario();
 		salvo.setId(1L);
 		salvo.setNome("Teste");
 		salvo.setEmail("teste@alpha.com.br");
+		salvo.setSenha("senha");
 		salvo.setTipo(TipoUsuarioEnum.ADMINISTRADOR);
 		salvo.setSetor(setor);
 		
 		given(service.save(novoUsuario)).willReturn(salvo);
-
+		
 	    mockMvc.perform(
     		RestDocumentationRequestBuilders
 	    		.post("/usuario/").contentType("application/json")
-			    .content(this.objectMapper.writeValueAsString(novoUsuario)))
+			    .content(objectMapper.writeValueAsString(novoUsuario)))
 	    		.andExpect(status().isOk())
 	    		.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.nome", is("Teste")))
+				.andExpect(jsonPath("$.senha").doesNotExist())
 	    		.andExpect(content().contentType("application/json"))
 	    		.andDo(document("usuario/create", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint())));
+	    
 		
 	}
 
@@ -221,6 +236,7 @@ public class UsuarioRestControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(1)))
 			.andExpect(jsonPath("$.nome", is("Teste")))
+			.andExpect(jsonPath("$.senha").doesNotExist())
 			.andExpect(content().contentType("application/json"))
 			.andDo(document("usuario/get",
 					preprocessRequest(prettyPrint()),

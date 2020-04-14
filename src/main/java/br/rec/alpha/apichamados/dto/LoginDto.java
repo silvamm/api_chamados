@@ -1,11 +1,11 @@
-package br.rec.alpha.apichamados.model.dto;
+package br.rec.alpha.apichamados.dto;
 
 import java.io.Serializable;
 
 import lombok.Data;
 
 @Data
-public class Login implements Serializable{
+public class LoginDto implements Serializable{
 
 	/**
 	 * 

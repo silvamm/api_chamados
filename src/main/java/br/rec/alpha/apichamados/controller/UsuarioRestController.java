@@ -2,9 +2,9 @@ package br.rec.alpha.apichamados.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.rec.alpha.apichamados.dto.UsuarioDto;
 import br.rec.alpha.apichamados.model.Usuario;
 import br.rec.alpha.apichamados.service.UsuarioService;
 
@@ -28,28 +27,30 @@ public class UsuarioRestController {
 	private UsuarioService service;
 	
 	@GetMapping("/")
-	public List<Usuario> listar() {
-		return service.listAll();
+	public List<UsuarioDto> listar() {
+		return service.listAll().stream().map(UsuarioDto::new).collect(Collectors.toList());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> get(@PathVariable Long id) {
-		Optional<Usuario> usuario = service.findById(id);
-		return ResponseEntity.of(usuario);
+	public ResponseEntity<UsuarioDto> get(@PathVariable Long id) {
+		Optional<Usuario> encontrado = service.findById(id);
+		return ResponseEntity.of(encontrado.isPresent() ? Optional.of(new UsuarioDto(encontrado.get())) : Optional.empty());
 	}
 	
+	
 	@PostMapping("/")
-	public Usuario salvar(@RequestBody Usuario usuario){
-		return service.save(usuario); 
+	public UsuarioDto salvar(@RequestBody Usuario usuario){
+		Usuario salvo = service.save(usuario);
+		return new UsuarioDto(salvo); 
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> editar(@PathVariable Long id, @RequestBody Usuario usuario) {
+	public ResponseEntity<UsuarioDto> editar(@PathVariable Long id, @RequestBody Usuario usuario) {
 		return service.findById(id)
 		           .map(registro -> {
 		        	   usuario.setId(registro.getId());
 		               Usuario atualizado = service.save(usuario);
-		               return ResponseEntity.ok(atualizado);
+		               return ResponseEntity.ok(new UsuarioDto(atualizado));
 		           }).orElse(ResponseEntity.notFound().build());
 		
 	}

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.rec.alpha.apichamados.dto.LoginDto;
 import br.rec.alpha.apichamados.model.Usuario;
-import br.rec.alpha.apichamados.model.dto.Login;
 import br.rec.alpha.apichamados.service.LoginService;
 
 @RestController
@@ -21,7 +21,7 @@ public class LoginRestController {
 	private LoginService service;
 	
 	@PostMapping("/")
-	public ResponseEntity<Usuario> login(@RequestBody Login login){
+	public ResponseEntity<Usuario> login(@RequestBody LoginDto login){
 		Optional<Usuario> logado = service.login(login);
 		return ResponseEntity.of(logado);
 	}
