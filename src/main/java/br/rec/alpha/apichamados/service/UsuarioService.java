@@ -29,6 +29,10 @@ public class UsuarioService {
 	}
 	
 	public Usuario save(Usuario usuario) {
+		
+		if(repo.findByEmail(usuario.getEmail()).isPresent()) 
+			throw new IllegalArgumentException("O e-mail já esta cadastrado");
+		
 		String encrpyt = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
 		usuario.setSenha(encrpyt);
 		return repo.save(usuario);

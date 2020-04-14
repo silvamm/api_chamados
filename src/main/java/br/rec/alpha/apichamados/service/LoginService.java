@@ -23,7 +23,6 @@ public class LoginService {
 			Usuario usuario = optUsuario.get();
 			boolean senhaCorreta = BCrypt.checkpw(login.getSenha(), usuario.getSenha()); 
 			if (senhaCorreta) {
-				usuario.setSenha(null);
 				return Optional.of(usuario);
 			}
 		}
