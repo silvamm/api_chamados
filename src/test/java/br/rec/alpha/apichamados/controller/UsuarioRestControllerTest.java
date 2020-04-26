@@ -1,6 +1,5 @@
 package br.rec.alpha.apichamados.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -67,7 +66,7 @@ import br.rec.alpha.apichamados.model.Usuario;
 import br.rec.alpha.apichamados.repository.UsuarioRepository;
 import br.rec.alpha.apichamados.service.UsuarioService;
 
-@SpringBootTest
+@SpringBootTest //JUNIT 5 + SPRING REST DOC
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class})
 public class UsuarioRestControllerTest {
 	
@@ -108,28 +107,6 @@ public class UsuarioRestControllerTest {
     	usuario.setSetor(setor);
     	
 		given(service.findById(usuario.getId())).willReturn(Optional.of(usuario));
-	}
-	
-	private FieldDescriptor[] getDescricaoDosAtributosDoUsuario() {
-	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
-	                fieldWithPath("email").description("O e-mail do usuário").type(JsonFieldType.STRING),
-	                fieldWithPath("senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
-	                fieldWithPath("nome").description("O nome do usuário").type(JsonFieldType.STRING),
-	                subsectionWithPath("setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
-	                fieldWithPath("tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
-	    };
-	}
-	
-	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDeUsuarios() {
-	    return new FieldDescriptor[]{
-	    			fieldWithPath("[]").description("Lista de usuários").type(JsonFieldType.ARRAY),
-	    			subsectionWithPath("[].id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
-	    			subsectionWithPath("[].email").description("O e-mail do usuário").type(JsonFieldType.STRING),
-	                subsectionWithPath("[].senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
-	                subsectionWithPath("[].nome").description("O nome do usuário").type(JsonFieldType.STRING),
-	                subsectionWithPath("[].setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
-	                subsectionWithPath("[].tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
-	    };
 	}
 	
 	@Test
@@ -234,9 +211,9 @@ public class UsuarioRestControllerTest {
 			RestDocumentationRequestBuilders
 			.get("/usuario/{id}", 1))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(1)))
-			.andExpect(jsonPath("$.nome", is("Teste")))
-			.andExpect(jsonPath("$.senha").doesNotExist())
+			.andExpect(jsonPath("$.id", is(1))) 
+			.andExpect(jsonPath("$.nome", is("Teste"))) 
+			.andExpect(jsonPath("$.senha").doesNotExist()) 
 			.andExpect(content().contentType("application/json"))
 			.andDo(document("usuario/get",
 					preprocessRequest(prettyPrint()),
@@ -261,6 +238,28 @@ public class UsuarioRestControllerTest {
 				        parameterWithName("id").description("O id do usuário a ser deletado")
 					      )));
 		
+	}
+	
+	private FieldDescriptor[] getDescricaoDosAtributosDoUsuario() {
+	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
+	                fieldWithPath("email").description("O e-mail do usuário").type(JsonFieldType.STRING),
+	                fieldWithPath("senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
+	                fieldWithPath("nome").description("O nome do usuário").type(JsonFieldType.STRING),
+	                subsectionWithPath("setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
+	                fieldWithPath("tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
+	    };
+	}
+	
+	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDeUsuarios() {
+	    return new FieldDescriptor[]{
+	    			fieldWithPath("[]").description("Lista de usuários").type(JsonFieldType.ARRAY),
+	    			subsectionWithPath("[].id").description("O identificador único do usuário").type(JsonFieldType.NUMBER),
+	    			subsectionWithPath("[].email").description("O e-mail do usuário").type(JsonFieldType.STRING),
+	                subsectionWithPath("[].senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
+	                subsectionWithPath("[].nome").description("O nome do usuário").type(JsonFieldType.STRING),
+	                subsectionWithPath("[].setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
+	                subsectionWithPath("[].tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
+	    };
 	}
 
 }
