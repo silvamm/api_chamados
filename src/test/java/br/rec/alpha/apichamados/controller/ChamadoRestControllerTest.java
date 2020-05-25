@@ -40,7 +40,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.rec.alpha.apichamados.enumm.PrioridadeChamadosEnum;
+import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import br.rec.alpha.apichamados.model.Chamado;
 import br.rec.alpha.apichamados.model.ChamadoPredefinido;
@@ -76,16 +76,16 @@ public class ChamadoRestControllerTest {
 		
 		chamado = new Chamado();
 		chamado.setId(1L);
-		chamado.setDataCriacao(LocalDateTime.now());
-		chamado.setDataEncerramento(LocalDateTime.now());
+		chamado.setCriadoEm(LocalDateTime.now());
+		chamado.setEncerradoEm(LocalDateTime.now());
 		chamado.setDescricao("Descrição");
 		chamado.setProtocolo("Protocolo");
 		chamado.setStatus(StatusChamadoEnum.PENDENTE);
-		chamado.setPrioridade(PrioridadeChamadosEnum.NORMAL);
+		chamado.setPrioridade(PrioridadeChamadoEnum.NORMAL);
 		
 		ChamadoPredefinido definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
-		chamado.setPreDefinida(definicao);
+		chamado.setPredefinicao(definicao);
 		
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
@@ -97,13 +97,13 @@ public class ChamadoRestControllerTest {
 	private FieldDescriptor[] getDescricaoDosAtributosDoChamado() {
 	    return new FieldDescriptor[]{
 	    			fieldWithPath("id").description("O identificador único do chamado").type(JsonFieldType.NUMBER),
-	                fieldWithPath("dataCriacao").description("Data de criacao do chamado").type(JsonFieldType.STRING),
-	                fieldWithPath("dataEncerramento").description("Data de encerramento do chamado").type(JsonFieldType.STRING),
+	                fieldWithPath("criadoEm").description("Data de criacao do chamado").type(JsonFieldType.STRING),
+	                fieldWithPath("encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("status").description("Status do chamado. (PENDENTE, VISUALIZADO, CANCELADO, RESOLVIDO) ").type(JsonFieldType.STRING),
 	                fieldWithPath("prioridade").description("Nivel de prioridade do chamado. (NORMAL, URGENTE, CRITICO) ").type(JsonFieldType.STRING),
-	                subsectionWithPath("preDefinida").description("Definição do chamado").type(JsonFieldType.OBJECT),
+	                subsectionWithPath("predefinicao").description("Definição do chamado").type(JsonFieldType.OBJECT),
 	                subsectionWithPath("criadoPor").description("Usuário que criou o chamado").type(JsonFieldType.OBJECT)
 	    };
 	}
@@ -112,14 +112,14 @@ public class ChamadoRestControllerTest {
 	    return new FieldDescriptor[]{
 	    			fieldWithPath("[]").description("Lista de Definições").type(JsonFieldType.ARRAY),
 	    			subsectionWithPath("[].id").description("O identificador único do chamado").type(JsonFieldType.NUMBER),
-	    			subsectionWithPath("[].dataCriacao").description("Data de criacao do chamado").type(JsonFieldType.STRING).optional(),
-	    			subsectionWithPath("[].dataEncerramento").description("Data de encerramento do chamado").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].criadoEm").description("Data de criacao do chamado").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	    			subsectionWithPath("[].protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].status").description("Status do chamado. (PENDENTE, VISUALIZADO, CANCELADO, RESOLVIDO) ").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].prioridade").description("Nivel de prioridade do chamado. (NORMAL, URGENTE, CRITICO) ").type(JsonFieldType.STRING).optional(),
-	    			subsectionWithPath("[].preDefinida").description("Definição do chamado").type(JsonFieldType.OBJECT),
-	    			subsectionWithPath("[].preDefinida.id").description("O identificar únido da definição do chamado").type(JsonFieldType.NUMBER),
+	    			subsectionWithPath("[].predefinicao").description("Definição do chamado").type(JsonFieldType.OBJECT),
+	    			subsectionWithPath("[].predefinicao.id").description("O identificar únido da definição do chamado").type(JsonFieldType.NUMBER),
 	    			subsectionWithPath("[].criadoPor").description("Usuário que criou o chamado").type(JsonFieldType.OBJECT),
 	    			subsectionWithPath("[].criadoPor.id").description("Usuário que criou o chamado").type(JsonFieldType.NUMBER)
 	    };
@@ -130,16 +130,16 @@ public class ChamadoRestControllerTest {
 
 		Chamado chamado2 = new Chamado();
 		chamado2.setId(2L);
-		chamado2.setDataCriacao(LocalDateTime.now());
-		chamado2.setDataEncerramento(LocalDateTime.now());
+		chamado2.setCriadoEm(LocalDateTime.now());
+		chamado2.setEncerradoEm(LocalDateTime.now());
 		chamado2.setDescricao("Descrição");
 		chamado2.setProtocolo("Protocolo");
 		chamado2.setStatus(StatusChamadoEnum.VISUALIZADO);
-		chamado2.setPrioridade(PrioridadeChamadosEnum.URGENTE);
+		chamado2.setPrioridade(PrioridadeChamadoEnum.URGENTE);
 		
 		ChamadoPredefinido definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
-		chamado2.setPreDefinida(definicao);
+		chamado2.setPredefinicao(definicao);
 		
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
@@ -192,7 +192,7 @@ public class ChamadoRestControllerTest {
 		
 		ChamadoPredefinido definicao = new ChamadoPredefinido();
 		definicao.setId(1L);
-		chamado.setPreDefinida(definicao);
+		chamado.setPredefinicao(definicao);
 		
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
@@ -200,13 +200,13 @@ public class ChamadoRestControllerTest {
 
 		Chamado salvo = new Chamado();
 		salvo.setId(1L);
-		salvo.setDataCriacao(LocalDateTime.now());
-		salvo.setDataEncerramento(LocalDateTime.now());
+		salvo.setCriadoEm(LocalDateTime.now());
+		salvo.setEncerradoEm(LocalDateTime.now());
 		salvo.setDescricao("Descrição");
 		salvo.setProtocolo("Protocolo");
 		salvo.setStatus(StatusChamadoEnum.PENDENTE);
-		salvo.setPrioridade(PrioridadeChamadosEnum.NORMAL);
-		chamado.setPreDefinida(definicao);
+		salvo.setPrioridade(PrioridadeChamadoEnum.NORMAL);
+		chamado.setPredefinicao(definicao);
 		chamado.setCriadoPor(usuario);
 
 		

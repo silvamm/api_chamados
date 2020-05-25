@@ -38,16 +38,21 @@ public class UsuarioRestController {
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDto> get(@PathVariable Long id) {
 		Optional<Usuario> encontrado = service.findById(id);
-		return ResponseEntity.of(encontrado.isPresent() ? Optional.of(new UsuarioDto(encontrado.get())) : Optional.empty());
+		Optional<UsuarioDto> usuarioDto = encontrado.isPresent() ? Optional.of(new UsuarioDto(encontrado.get())) : Optional.empty();
+		return ResponseEntity.of(usuarioDto);
 	}
 	
 	
 	@PostMapping("/")
 	public ResponseEntity<UsuarioDto> salvar(@RequestBody Usuario usuario){
 		try {
+			usuario.setId(null);
 			Usuario salvo = service.save(usuario);
-			return ResponseEntity.ok(new UsuarioDto(salvo)); 
+			UsuarioDto usuarioDto = new UsuarioDto(salvo);
+			return ResponseEntity.ok(usuarioDto); 
 		}catch(IllegalArgumentException e) {
+			if(e.getMessage().contains("senha"))
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 			 throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
 		}
 	}
@@ -58,7 +63,8 @@ public class UsuarioRestController {
 		           .map(registro -> {
 		        	   usuario.setId(registro.getId());
 		               Usuario atualizado = service.save(usuario);
-		               return ResponseEntity.ok(new UsuarioDto(atualizado));
+		               UsuarioDto usuarioDto = new UsuarioDto(atualizado);
+		               return ResponseEntity.ok(usuarioDto);
 		           }).orElse(ResponseEntity.notFound().build());
 		
 	}

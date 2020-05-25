@@ -13,7 +13,7 @@ Matheus Monteiro <silvammclio@gmail.com>;
 == Introdução
 Essa API tem por objetivo ser uma interface para gerenciar os dados que alimentam a plataforma System Call, responsável pelos chamados da faculdade Alpha.
 
-== Usuário API
+== Usuário 
 Lista de endpoints para o gerenciamento de usuários no System Call.
 
 === Get - Por id
@@ -103,7 +103,7 @@ include::{snippets}/usuario/delete/curl-request.adoc[]
 
 
 
-== Setor API
+== Setor
 Lista de endpoints para o gerenciamento de setores no System Call.
 
 === Get - Por id
@@ -190,7 +190,7 @@ include::{snippets}/setor/delete/curl-request.adoc[]
 
 
 
-== Chamados Predefinidos API
+== Chamados Predefinidos 
 Lista de endpoints para o gerenciamento de chamados predefinidos / definições no System Call.
 
 === Get - Por id
@@ -279,7 +279,7 @@ include::{snippets}/definicao/delete/curl-request.adoc[]
 
 
 
-== Chamados API
+== Chamados 
 Lista de endpoints para o gerenciamento de chamados no System Call.
 
 === Get - Por id
@@ -351,6 +351,21 @@ include::{snippets}/chamado/delete/http-response.adoc[]
 
 ==== Exemplo CURL
 include::{snippets}/chamado/delete/curl-request.adoc[]
+
+
+
+
+
+
+
+== Erros
+Ao utilizar a API fora dos padrões informados nesta documentação alguns erros podem acontecer
+
+=== Exemplo de Resposta
+include::{snippets}/error/response-body.adoc[]
+
+=== Campos da Resposta 
+include::{snippets}/error/response-fields.adoc[]
 
 
 

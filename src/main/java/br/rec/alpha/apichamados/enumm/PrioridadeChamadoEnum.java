@@ -1,6 +1,6 @@
 package br.rec.alpha.apichamados.enumm;
 
-public enum PrioridadeChamadosEnum {
+public enum PrioridadeChamadoEnum {
 	
 	NORMAL("Normal"),
 	URGENTE("Urgente"),
@@ -8,7 +8,7 @@ public enum PrioridadeChamadosEnum {
 	
 	private final String nome;
 
-	private PrioridadeChamadosEnum(String nome) {
+	private PrioridadeChamadoEnum(String nome) {
 		this.nome = nome;
 	}
 

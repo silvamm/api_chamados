@@ -2,7 +2,7 @@ package br.rec.alpha.apichamados.enumm;
 
 public enum TipoUsuarioEnum {
 	
-	NORMAL("Normal"),
+	COMUM("Comum"),
 	ADMINISTRADOR("Administrador");
 	
 	private final String nome;

@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import br.rec.alpha.apichamados.enumm.PrioridadeChamadosEnum;
+import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import lombok.Data;
 
@@ -21,12 +21,12 @@ public class Chamado {
 	private Long id;
 	private String protocolo;
 	@ManyToOne
-	private ChamadoPredefinido preDefinida;
+	private ChamadoPredefinido predefinicao;
 	private String descricao;
 	private StatusChamadoEnum status;
-	private PrioridadeChamadosEnum prioridade;
-	private LocalDateTime dataCriacao;
-	private LocalDateTime dataEncerramento;
+	private PrioridadeChamadoEnum prioridade;
+	private LocalDateTime criadoEm;
+	private LocalDateTime encerradoEm;
 	@ManyToOne
 	private Usuario criadoPor;
 

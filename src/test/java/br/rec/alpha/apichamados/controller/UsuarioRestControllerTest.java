@@ -1,5 +1,8 @@
 package br.rec.alpha.apichamados.controller;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -17,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 import java.io.BufferedReader;
@@ -28,6 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.servlet.RequestDispatcher;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,13 +49,17 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.handler.HandlerExceptionResolverComposite;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -121,7 +131,7 @@ public class UsuarioRestControllerTest {
 		usuario2.setNome("Teste 2");
 		usuario2.setSenha("senha2");
 		usuario2.setEmail("teste2@alpha.com.br");
-		usuario2.setTipo(TipoUsuarioEnum.NORMAL);
+		usuario2.setTipo(TipoUsuarioEnum.COMUM);
 		usuario2.setSetor(setor2);
 		
 		List<Usuario> usuarios = new ArrayList<>();
@@ -134,6 +144,7 @@ public class UsuarioRestControllerTest {
     		RestDocumentationRequestBuilders
                 .get("/usuario/"))
         		.andExpect(status().isOk())
+        		.andExpect(jsonPath("$.senha").doesNotExist())
 	    		.andExpect(content().contentType("application/json"))
 	    		.andDo(document("usuario/list", 
 	    				preprocessRequest(prettyPrint()),
@@ -146,7 +157,6 @@ public class UsuarioRestControllerTest {
     public void update() throws Exception {
     	
     	usuario.setNome("Teste Atualizado");
-    	
 		given(service.save(usuario)).willReturn(usuario);
 
         mockMvc.perform(
@@ -246,7 +256,7 @@ public class UsuarioRestControllerTest {
 	                fieldWithPath("senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
 	                fieldWithPath("nome").description("O nome do usuário").type(JsonFieldType.STRING),
 	                subsectionWithPath("setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
-	                fieldWithPath("tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
+	                fieldWithPath("tipo").description("O tipo de usuário (ADMINISTRADOR ou COMUM)").optional().type(JsonFieldType.STRING)
 	    };
 	}
 	
@@ -258,7 +268,7 @@ public class UsuarioRestControllerTest {
 	                subsectionWithPath("[].senha").description("A senha do usuário. Não é retornada").optional().type(JsonFieldType.STRING),
 	                subsectionWithPath("[].nome").description("O nome do usuário").type(JsonFieldType.STRING),
 	                subsectionWithPath("[].setor").description("O setor que o usuário faz parte").optional().type(JsonFieldType.OBJECT),
-	                subsectionWithPath("[].tipo").description("O tipo de usuário (ADMINISTRADOR ou NORMAL)").optional().type(JsonFieldType.STRING)
+	                subsectionWithPath("[].tipo").description("O tipo de usuário (ADMINISTRADOR ou COMUM)").optional().type(JsonFieldType.STRING)
 	    };
 	}
 
