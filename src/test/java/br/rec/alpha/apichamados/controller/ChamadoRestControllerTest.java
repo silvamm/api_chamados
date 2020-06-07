@@ -69,9 +69,9 @@ public class ChamadoRestControllerTest {
 		
 		mockMvc = MockMvcBuilders.webAppContextSetup(context)
 				.apply(documentationConfiguration(restDocumentation).uris()
-		                .withScheme("http")
+		                .withScheme("https")
 		                .withHost("softrec.com.br")
-		                .withPort(8080))
+		                .withPort(443))
 				.build();
 		
 		chamado = new Chamado();
@@ -101,7 +101,7 @@ public class ChamadoRestControllerTest {
 	                fieldWithPath("encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING),
-	                fieldWithPath("status").description("Status do chamado. (PENDENTE, VISUALIZADO, CANCELADO, RESOLVIDO) ").type(JsonFieldType.STRING),
+	                fieldWithPath("status").description("Status do chamado. (PENDENTE, VISUALIZADO, CANCELADO, ENCERRADO) ").type(JsonFieldType.STRING),
 	                fieldWithPath("prioridade").description("Nivel de prioridade do chamado. (NORMAL, URGENTE, CRITICO) ").type(JsonFieldType.STRING),
 	                subsectionWithPath("predefinicao").description("Definição do chamado").type(JsonFieldType.OBJECT),
 	                subsectionWithPath("criadoPor").description("Usuário que criou o chamado").type(JsonFieldType.OBJECT)
@@ -116,7 +116,7 @@ public class ChamadoRestControllerTest {
 	    			subsectionWithPath("[].encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	    			subsectionWithPath("[].protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING).optional(),
-	    			subsectionWithPath("[].status").description("Status do chamado. (PENDENTE, VISUALIZADO, CANCELADO, RESOLVIDO) ").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].status").description("Status do chamado. (PENDENTE, VISUALIZADO, CANCELADO, ENCERRADO) ").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].prioridade").description("Nivel de prioridade do chamado. (NORMAL, URGENTE, CRITICO) ").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].predefinicao").description("Definição do chamado").type(JsonFieldType.OBJECT),
 	    			subsectionWithPath("[].predefinicao.id").description("O identificar únido da definição do chamado").type(JsonFieldType.NUMBER),

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.rec.alpha.apichamados.dto.ChamadoDto;
+import br.rec.alpha.apichamados.dto.QueryChamadosDto;
+import br.rec.alpha.apichamados.dto.QueryUsuariosDto;
 import br.rec.alpha.apichamados.dto.UsuarioDto;
 import br.rec.alpha.apichamados.model.Usuario;
 import br.rec.alpha.apichamados.service.UsuarioService;
@@ -33,6 +36,11 @@ public class UsuarioRestController {
 	@GetMapping("/")
 	public List<UsuarioDto> listar() {
 		return service.listAll().stream().map(UsuarioDto::new).collect(Collectors.toList());
+	}
+	
+	@GetMapping("/query")
+	public List<UsuarioDto> listar(@RequestBody QueryUsuariosDto query){
+		return service.listAll(query).stream().map(UsuarioDto::new).collect(Collectors.toList());
 	}
 	
 	@GetMapping("/{id}")

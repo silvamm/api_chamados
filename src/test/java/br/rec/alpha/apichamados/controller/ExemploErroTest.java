@@ -44,7 +44,7 @@ public class ExemploErroTest {
 				.apply(documentationConfiguration(restDocumentation).uris()
 		                .withScheme("https")
 		                .withHost("softrec.com.br")
-		                .withPort(8080))
+		                .withPort(443))
 				.build();
 		
 	}

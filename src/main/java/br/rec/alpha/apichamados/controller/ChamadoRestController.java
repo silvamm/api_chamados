@@ -1,6 +1,7 @@
 package br.rec.alpha.apichamados.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.rec.alpha.apichamados.dto.ChamadoDto;
+import br.rec.alpha.apichamados.dto.QueryChamadosDto;
 import br.rec.alpha.apichamados.model.Chamado;
 import br.rec.alpha.apichamados.service.ChamadoService;
 
@@ -26,6 +29,11 @@ public class ChamadoRestController {
 	@GetMapping("/")
 	public List<Chamado> listar(){
 		return service.listAll();
+	}
+	
+	@GetMapping("/query")
+	public List<ChamadoDto> listar(@RequestBody QueryChamadosDto query){
+		return service.listAll(query).stream().map(ChamadoDto::new).collect(Collectors.toList());
 	}
 	
 	@GetMapping("/{id}")

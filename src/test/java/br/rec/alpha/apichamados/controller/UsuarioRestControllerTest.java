@@ -100,7 +100,7 @@ public class UsuarioRestControllerTest {
 				.apply(documentationConfiguration(restDocumentation).uris()
 		                .withScheme("https")
 		                .withHost("softrec.com.br")
-		                .withPort(8080))
+		                .withPort(443))
 				.build();
 		
 	 	usuario = new Usuario();

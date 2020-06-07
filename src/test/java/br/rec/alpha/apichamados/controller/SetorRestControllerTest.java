@@ -67,9 +67,9 @@ public class SetorRestControllerTest {
 		
 		mockMvc = MockMvcBuilders.webAppContextSetup(context)
 				.apply(documentationConfiguration(restDocumentation).uris()
-		                .withScheme("http")
+		                .withScheme("https")
 		                .withHost("softrec.com.br")
-		                .withPort(8080))
+		                .withPort(443))
 				.build();
 		
     	setor = new Setor();
