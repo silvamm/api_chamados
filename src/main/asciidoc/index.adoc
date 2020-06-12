@@ -188,80 +188,79 @@ include::{snippets}/setor/delete/curl-request.adoc[]
 
 
 
-
-
-== Chamados Predefinidos 
-Lista de endpoints para o gerenciamento de chamados predefinidos / definições no System Call.
+== Problemas API
+Lista de endpoints para o gerenciamento de definição de problemas no System Call.
 
 === Get - Por id
-Obter um chamado predefinido específico pelo identificador único.
+Obter uma definição de problema específico pelo identificador único.
 
 ==== Exemplo de Requisição
-include::{snippets}/definicao/get/http-request.adoc[]
+include::{snippets}/problema/get/http-request.adoc[]
 
 ==== Parâmetros da Requisição
-include::{snippets}/definicao/get/path-parameters.adoc[]
+include::{snippets}/problema/get/path-parameters.adoc[]
 
 ==== Exemplo de Resposta
-include::{snippets}/definicao/get/http-response.adoc[]
+include::{snippets}/problema/get/http-response.adoc[]
 
 ==== Campos da Resposta
-include::{snippets}/definicao/get/response-fields.adoc[]
+include::{snippets}/problema/get/response-fields.adoc[]
 
 ==== Exemplo CURL
-include::{snippets}/definicao/get/curl-request.adoc[]
+include::{snippets}/problema/get/curl-request.adoc[]
 
 === Get - Todos
 
-Obter todos os chamados predefinicos do sistema.
+Obter todas as definições de problema do sistema.
 
 ==== Exemplo de Requisição
-include::{snippets}/definicao/list/http-request.adoc[]
+include::{snippets}/problema/list/http-request.adoc[]
 
 ==== Exemplo de Resposta
-include::{snippets}/definicao/list/http-response.adoc[]
+include::{snippets}/problema/list/http-response.adoc[]
 
 ==== Campos da Resposta
-include::{snippets}/definicao/list/response-fields.adoc[]
+include::{snippets}/problema/list/response-fields.adoc[]
 
 ==== Exemplo CURL
-include::{snippets}/definicao/list/curl-request.adoc[]
+include::{snippets}/problema/list/curl-request.adoc[]
 
 === Post
-Criar um chamado predefinido para o sistema.
+Criar uma definição de problema para o sistema.
 
 ==== Exemplo de Requisição
-include::{snippets}/definicao/create/http-request.adoc[]
+include::{snippets}/problema/create/http-request.adoc[]
 
 ==== Exemplo de Resposta
-include::{snippets}/definicao/create/http-response.adoc[]
+include::{snippets}/problema/create/http-response.adoc[]
 
 ==== Exemplo CURL
-include::{snippets}/definicao/create/curl-request.adoc[]
+include::{snippets}/problema/create/curl-request.adoc[]
 
 === Put
 Editar um chamado predefinido pelo identificador único.
 
 ==== Exemplo de Requisição
-include::{snippets}/definicao/update/http-request.adoc[]
+include::{snippets}/problema/update/http-request.adoc[]
 
 ==== Exemplo de Resposta
-include::{snippets}/definicao/update/http-response.adoc[]
+include::{snippets}/problema/update/http-response.adoc[]
 
 ==== Exemplo CURL
-include::{snippets}/definicao/update/curl-request.adoc[]
+include::{snippets}/problema/update/curl-request.adoc[]
 
 === Delete
-Deletar um chamado predefinido específico pelo identificador único.
+Deletar uma definição de problema específico pelo identificador único.
 
 ==== Exemplo de Requisição
-include::{snippets}/definicao/delete/http-request.adoc[]
+include::{snippets}/problema/delete/http-request.adoc[]
 
 ==== Exemplo de Resposta
-include::{snippets}/definicao/delete/http-response.adoc[]
+include::{snippets}/problema/delete/http-response.adoc[]
 
 ==== Exemplo CURL
-include::{snippets}/definicao/delete/curl-request.adoc[]
+include::{snippets}/problema/delete/curl-request.adoc[]
+
 
 
 

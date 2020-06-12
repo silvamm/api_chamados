@@ -3,9 +3,9 @@ package br.rec.alpha.apichamados.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.rec.alpha.apichamados.model.ChamadoPredefinido;
+import br.rec.alpha.apichamados.model.Problema;
 
 @Repository
-public interface ChamadoPredefinidoRepository extends JpaRepository<ChamadoPredefinido, Long>{
+public interface ProblemaRepository extends JpaRepository<Problema, Long>{
 
 }

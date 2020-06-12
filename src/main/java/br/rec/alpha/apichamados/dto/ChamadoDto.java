@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import br.rec.alpha.apichamados.model.Chamado;
-import br.rec.alpha.apichamados.model.ChamadoPredefinido;
+import br.rec.alpha.apichamados.model.Problema;
 import lombok.Data;
 
 @Data
@@ -15,7 +15,7 @@ public class ChamadoDto {
 	private Long id;
 	private String protocolo;
 	private String descricao;
-	private ChamadoPredefinido predefinicao;
+	private Problema problema;
 	private StatusChamadoEnum status;
 	private PrioridadeChamadoEnum prioridade;
 	private Long criadoEm;
@@ -28,7 +28,7 @@ public class ChamadoDto {
 		this.id = chamado.getId();
 		this.protocolo = chamado.getProtocolo();
 		this.descricao = chamado.getDescricao();
-		this.predefinicao = chamado.getPredefinicao();
+		this.problema = chamado.getProblema();
 		this.status = chamado.getStatus();
 		this.prioridade = chamado.getPrioridade();
 		

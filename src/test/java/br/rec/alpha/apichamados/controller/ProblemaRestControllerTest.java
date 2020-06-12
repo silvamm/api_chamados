@@ -43,12 +43,12 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.rec.alpha.apichamados.model.ChamadoPredefinido;
-import br.rec.alpha.apichamados.service.ChamadoPredefinidosService;
+import br.rec.alpha.apichamados.model.Problema;
+import br.rec.alpha.apichamados.service.ProblemaService;
 
 @SpringBootTest
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class})
-public class ChamadosPredefinidosRestControllerTest {
+public class ProblemaRestControllerTest {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -59,9 +59,9 @@ public class ChamadosPredefinidosRestControllerTest {
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private ChamadoPredefinidosService service;
+	private ProblemaService service;
 	
-	private ChamadoPredefinido definicao;
+	private Problema problema;
 	
 	@BeforeEach
 	public void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -73,69 +73,69 @@ public class ChamadosPredefinidosRestControllerTest {
 		                .withPort(443))
 				.build();
 		
-		definicao = new ChamadoPredefinido();
-		definicao.setId(1L);
-		definicao.setNome("Teste");
+		problema = new Problema();
+		problema.setId(1L);
+		problema.setNome("Teste");
     	
-		given(service.findById(definicao.getId())).willReturn(Optional.of(definicao));
+		given(service.findById(problema.getId())).willReturn(Optional.of(problema));
 	}
 	
-	private FieldDescriptor[] getDescricaoDosAtributosDaDefinicao() {
-	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único da definição").type(JsonFieldType.NUMBER),
-	                fieldWithPath("nome").description("O nome da definição").type(JsonFieldType.STRING),
+	private FieldDescriptor[] getDescricaoDosAtributosDoProblema() {
+	    return new FieldDescriptor[]{fieldWithPath("id").description("O identificador único do problema").type(JsonFieldType.NUMBER),
+	                fieldWithPath("nome").description("O nome do problema").type(JsonFieldType.STRING),
 	    };
 	}
 	
-	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDasDefinicoes() {
+	private FieldDescriptor[] getDescricaoDosAtributosDeUmaListaDosProblemas() {
 	    return new FieldDescriptor[]{
-	    			fieldWithPath("[]").description("Lista de Definições").type(JsonFieldType.ARRAY),
-	    			subsectionWithPath("[].id").description("O identificador único da definição").type(JsonFieldType.NUMBER),
-	                subsectionWithPath("[].nome").description("O nome da definição").type(JsonFieldType.STRING),
+	    			fieldWithPath("[]").description("Lista de problemas").type(JsonFieldType.ARRAY),
+	    			subsectionWithPath("[].id").description("O identificador único do problema").type(JsonFieldType.NUMBER),
+	                subsectionWithPath("[].nome").description("O nome do problema").type(JsonFieldType.STRING),
 	    };
 	}
 	
 	@Test
 	public void list() throws Exception {
 
-		ChamadoPredefinido definicao2 = new ChamadoPredefinido();
-		definicao2.setId(2L);
-		definicao2.setNome("Teste 2");
+		Problema problema2 = new Problema();
+		problema2.setId(2L);
+		problema2.setNome("Teste 2");
 		
-		List<ChamadoPredefinido> definicoes = new ArrayList<>();
-		definicoes.add(definicao);
-		definicoes.add(definicao2);
+		List<Problema> problemas = new ArrayList<>();
+		problemas.add(problema);
+		problemas.add(problema2);
 		
-		given(service.listAll()).willReturn(definicoes);
+		given(service.listAll()).willReturn(problemas);
 		
 	   mockMvc.perform(
     		RestDocumentationRequestBuilders
-                .get("/chamadopredefinido/"))
+                .get("/problema/"))
         		.andExpect(status().isOk())
 	    		.andExpect(content().contentType("application/json"))
-	    		.andDo(document("definicao/list", 
+	    		.andDo(document("problema/list", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint()),
-	    				responseFields(getDescricaoDosAtributosDeUmaListaDasDefinicoes())));
+	    				responseFields(getDescricaoDosAtributosDeUmaListaDosProblemas())));
 		
 	}
 	
     @Test
     public void update() throws Exception {
     	
-    	definicao.setNome("Teste Atualizado");
+    	problema.setNome("Teste Atualizado");
     	
-		given(service.save(definicao)).willReturn(definicao);
+		given(service.save(problema)).willReturn(problema);
 
         mockMvc.perform(
     		RestDocumentationRequestBuilders
-                .put("/chamadopredefinido/{id}", 1)
+                .put("/problema/{id}", 1)
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(definicao)))
+                .content(objectMapper.writeValueAsString(problema)))
         		.andExpect(status().isOk())
         		.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.nome", is("Teste Atualizado")))
 	    		.andExpect(content().contentType("application/json"))
-	    		.andDo(document("definicao/update", 
+	    		.andDo(document("problema/update", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint())));
     }
@@ -143,24 +143,24 @@ public class ChamadosPredefinidosRestControllerTest {
 	@Test
 	public void create() throws JsonProcessingException, Exception {
 		
-		ChamadoPredefinido novaDefinicao = new ChamadoPredefinido();
-		novaDefinicao.setNome("Teste");
+		Problema novoProblema = new Problema();
+		novoProblema.setNome("Teste");
 
-		ChamadoPredefinido salvo = new ChamadoPredefinido();
+		Problema salvo = new Problema();
 		salvo.setId(1L);
 		salvo.setNome("Teste");
 		
-		given(service.save(novaDefinicao)).willReturn(salvo);
+		given(service.save(novoProblema)).willReturn(salvo);
 
 	    mockMvc.perform(
     		RestDocumentationRequestBuilders
-	    		.post("/chamadopredefinido/").contentType("application/json")
-			    .content(this.objectMapper.writeValueAsString(novaDefinicao)))
+	    		.post("/problema/").contentType("application/json")
+			    .content(this.objectMapper.writeValueAsString(novoProblema)))
 	    		.andExpect(status().isOk())
 	    		.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.nome", is("Teste")))
 	    		.andExpect(content().contentType("application/json"))
-	    		.andDo(document("definicao/create", 
+	    		.andDo(document("problema/create", 
 	    				preprocessRequest(prettyPrint()),
 	    				preprocessResponse(prettyPrint())));
 		
@@ -171,16 +171,16 @@ public class ChamadosPredefinidosRestControllerTest {
 		
 		mockMvc.perform(
 			RestDocumentationRequestBuilders
-			.get("/chamadopredefinido/{id}", 1))
+			.get("/problema/{id}", 1))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(1)))
 			.andExpect(jsonPath("$.nome", is("Teste")))
 			.andExpect(content().contentType("application/json"))
-			.andDo(document("definicao/get",
+			.andDo(document("problema/get",
 					preprocessRequest(prettyPrint()),
 					preprocessResponse(prettyPrint()),
-					 pathParameters(parameterWithName("id").description("O id da definição a ser encontrada")),
-					 	responseFields(getDescricaoDosAtributosDaDefinicao())
+					 pathParameters(parameterWithName("id").description("O id do problema a ser encontrada")),
+					 	responseFields(getDescricaoDosAtributosDoProblema())
 					 	)
 					);
 	}
@@ -190,13 +190,13 @@ public class ChamadosPredefinidosRestControllerTest {
 		
 		mockMvc.perform(
 			RestDocumentationRequestBuilders
-			.delete("/chamadopredefinido/{id}", 1))
+			.delete("/problema/{id}", 1))
 			.andExpect(status().isOk())
-			.andDo(document("definicao/delete",
+			.andDo(document("problema/delete",
 					preprocessRequest(prettyPrint()),
 					preprocessResponse(prettyPrint()),
 					 pathParameters(
-				        parameterWithName("id").description("O id da definição a ser deletada")
+				        parameterWithName("id").description("O id do problema a ser deletada")
 					      )));
 		
 	}
