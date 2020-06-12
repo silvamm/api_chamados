@@ -27,8 +27,8 @@ public class ChamadoRestController {
 	public ChamadoService service;
 	
 	@GetMapping("/")
-	public List<Chamado> listar(){
-		return service.listAll();
+	public List<ChamadoDto> listar(){
+		return service.listAll().stream().map(ChamadoDto::new).collect(Collectors.toList());
 	}
 	
 	@GetMapping("/query")
@@ -37,8 +37,13 @@ public class ChamadoRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Chamado> get(@PathVariable Long id) {
-		return ResponseEntity.of(service.findById(id));
+	public ResponseEntity<ChamadoDto> get(@PathVariable Long id) {
+		return service.findById(id)
+				.map(registro -> {
+					ChamadoDto chamadoDto = new ChamadoDto(registro);
+					return ResponseEntity.ok(chamadoDto);
+				}).orElse(ResponseEntity.notFound().build());
+		
 	}
 	
 	@PostMapping("/")
