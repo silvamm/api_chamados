@@ -97,8 +97,8 @@ public class ChamadoRestControllerTest {
 	private FieldDescriptor[] getDescricaoDosAtributosDoChamado() {
 	    return new FieldDescriptor[]{
 	    			fieldWithPath("id").description("O identificador único do chamado").type(JsonFieldType.NUMBER),
-	                fieldWithPath("criadoEm").description("Data de criacao do chamado").type(JsonFieldType.STRING),
-	                fieldWithPath("encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING),
+	                fieldWithPath("criadoEm").description("Data de criacao do chamado").type(JsonFieldType.NUMBER),
+	                fieldWithPath("encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.NUMBER),
 	                fieldWithPath("descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("status").description("Status do chamado. (PENDENTE, VISUALIZADO, ACEITO, CANCELADO, ENCERRADO) ").type(JsonFieldType.STRING),
@@ -112,8 +112,8 @@ public class ChamadoRestControllerTest {
 	    return new FieldDescriptor[]{
 	    			fieldWithPath("[]").description("Lista de Definições").type(JsonFieldType.ARRAY),
 	    			subsectionWithPath("[].id").description("O identificador único do chamado").type(JsonFieldType.NUMBER),
-	    			subsectionWithPath("[].criadoEm").description("Data de criacao do chamado").type(JsonFieldType.STRING).optional(),
-	    			subsectionWithPath("[].encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].criadoEm").description("Data de criacao do chamado").type(JsonFieldType.NUMBER).optional(),
+	    			subsectionWithPath("[].encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.NUMBER).optional(),
 	    			subsectionWithPath("[].descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	    			subsectionWithPath("[].protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].status").description("Status do chamado. (PENDENTE, VISUALIZADO, ACEITO, CANCELADO, ENCERRADO) ").type(JsonFieldType.STRING).optional(),
