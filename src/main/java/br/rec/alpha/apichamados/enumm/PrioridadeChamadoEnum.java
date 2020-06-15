@@ -3,8 +3,7 @@ package br.rec.alpha.apichamados.enumm;
 public enum PrioridadeChamadoEnum {
 	
 	NORMAL("Normal"),
-	URGENTE("Urgente"),
-	CRITICO("Crítico");
+	URGENTE("Urgente");
 	
 	private final String nome;
 

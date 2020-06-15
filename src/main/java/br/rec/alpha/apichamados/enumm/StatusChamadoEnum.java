@@ -5,7 +5,6 @@ public enum StatusChamadoEnum {
 	PENDENTE("Pendente"),
 	VISUALIZADO("Visualizado"),
 	ACEITO("Aceito"),
-	CANCELADO("Cancelado"),
 	ENCERRADO("Encerrado");
 	
 	private final String nome;

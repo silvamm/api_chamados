@@ -1,7 +1,6 @@
 package br.rec.alpha.apichamados.dto;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
@@ -18,28 +17,20 @@ public class ChamadoDto {
 	private Problema problema;
 	private StatusChamadoEnum status;
 	private PrioridadeChamadoEnum prioridade;
-	private Long criadoEm;
-	private Long encerradoEm;
+	private LocalDateTime criadoEm;
+	private LocalDateTime encerradoEm;
 	private UsuarioDto criadoPor;
 	
 	
 	public ChamadoDto(Chamado chamado) {
-		
 		this.id = chamado.getId();
 		this.protocolo = chamado.getProtocolo();
 		this.descricao = chamado.getDescricao();
 		this.problema = chamado.getProblema();
 		this.status = chamado.getStatus();
 		this.prioridade = chamado.getPrioridade();
-		
-		ZonedDateTime zdt = ZonedDateTime.of(chamado.getCriadoEm(), ZoneId.systemDefault());
-		this.criadoEm = zdt.toInstant().toEpochMilli();
-		
-		if(chamado.getEncerradoEm() != null) {
-			zdt = ZonedDateTime.of(chamado.getEncerradoEm(), ZoneId.systemDefault());
-			this.encerradoEm = zdt.toInstant().toEpochMilli();
-		}
-		
+		this.criadoEm = chamado.getCriadoEm();
+		this.encerradoEm = chamado.getEncerradoEm();
 		this.criadoPor = new UsuarioDto(chamado.getCriadoPor());
 	}
 

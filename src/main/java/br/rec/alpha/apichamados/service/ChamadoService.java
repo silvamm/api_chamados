@@ -9,8 +9,11 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import br.rec.alpha.apichamados.dto.ChamadoDto;
 import br.rec.alpha.apichamados.dto.QueryChamadosDto;
 import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
@@ -23,10 +26,10 @@ import br.rec.alpha.apichamados.repository.ChamadoRepository;
 public class ChamadoService {
 
 	@Autowired
-	private ChamadoRepository repo;
+	private ChamadoRepository repository;
 
 	public List<Chamado> listAll() {
-		return repo.findAll();
+		return repository.findAll(Sort.by(Direction.DESC, "id"));
 	}
 	
 	public List<Chamado> listAll(QueryChamadosDto query) {
@@ -51,11 +54,11 @@ public class ChamadoService {
 		
 		Example<Chamado> example = Example.of(chamado, matcher);
 		
-		return repo.findAll(example);
+		return repository.findAll(example, Sort.by(Direction.DESC ,"id"));
 	}
 
 	public Optional<Chamado> findById(Long id) {
-		return repo.findById(id);
+		return repository.findById(id);
 	}
 
 	public Chamado save(Chamado chamado) {
@@ -82,11 +85,33 @@ public class ChamadoService {
 		chamado.setStatus(StatusChamadoEnum.PENDENTE);
 		chamado.setPrioridade(PrioridadeChamadoEnum.NORMAL);
 		
-		return repo.save(chamado);
+		return repository.save(chamado);
+	}
+	
+	public Optional<Chamado> edit(Chamado chamado) {
+		
+		return findById(chamado.getId())
+			.map(registro -> {
+				
+				if(chamado.getEncerradoEm() == null 
+						&& chamado.getStatus() == StatusChamadoEnum.ENCERRADO) {
+					chamado.setEncerradoEm(LocalDateTime.now());
+				}else {
+					chamado.setEncerradoEm(registro.getEncerradoEm());
+				}
+				
+				chamado.setCriadoEm(registro.getCriadoEm());
+				chamado.setProtocolo(registro.getProtocolo());
+				chamado.setCriadoPor(registro.getCriadoPor());
+				
+				return Optional.ofNullable(repository.save(chamado));
+				
+			}).orElseGet(() -> Optional.empty());
+		
 	}
 
 	public void delete(Long id) {
-		repo.deleteById(id);
+		repository.deleteById(id);
 	}
 
 }

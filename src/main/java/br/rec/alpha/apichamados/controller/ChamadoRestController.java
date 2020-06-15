@@ -47,18 +47,19 @@ public class ChamadoRestController {
 	}
 	
 	@PostMapping("/")
-	public Chamado criar(@RequestBody Chamado chamado) {
-		return service.save(chamado);
+	public ChamadoDto criar(@RequestBody Chamado chamado) {
+		Chamado salvo = service.save(chamado);
+		ChamadoDto resultado = new ChamadoDto(salvo);
+		return resultado;
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Chamado> editar(@PathVariable Long id, @RequestBody Chamado chamado){
-		return service.findById(id)
-				.map(registro -> {
-					chamado.setId(registro.getId());
-					Chamado atualizado = service.save(chamado);
-					return ResponseEntity.ok(atualizado);
-				}).orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<ChamadoDto> editar(@PathVariable Long id, @RequestBody Chamado chamado){
+		return service.edit(chamado).map(atualizado -> {
+			ChamadoDto resultado = new ChamadoDto(atualizado);
+			return ResponseEntity.ok(resultado);
+		}).orElse(ResponseEntity.notFound().build());
+		
 	}
 	
 	@DeleteMapping("/{id}")
