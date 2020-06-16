@@ -9,11 +9,15 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import br.rec.alpha.apichamados.dto.ChamadoDto;
+import br.rec.alpha.apichamados.dto.PaginacaoChamadoDto;
 import br.rec.alpha.apichamados.dto.QueryChamadosDto;
 import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
@@ -32,7 +36,7 @@ public class ChamadoService {
 		return repository.findAll(Sort.by(Direction.DESC, "id"));
 	}
 	
-	public List<Chamado> listAll(QueryChamadosDto query) {
+	public Page<Chamado> listAll(QueryChamadosDto query) {
 		
 		Usuario usuario = new Usuario();
 		usuario.setId(query.getIdUsuario());
@@ -54,7 +58,10 @@ public class ChamadoService {
 		
 		Example<Chamado> example = Example.of(chamado, matcher);
 		
-		return repository.findAll(example, Sort.by(Direction.DESC ,"id"));
+		Pageable numeroDeRegistroNaPagina = PageRequest.of(query.getPagina(), query.getLimite(), Sort.by(Direction.DESC ,"id"));
+		Page<Chamado> registros = repository.findAll(example, numeroDeRegistroNaPagina);
+		
+		return registros;
 	}
 
 	public Optional<Chamado> findById(Long id) {

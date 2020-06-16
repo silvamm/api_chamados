@@ -17,7 +17,7 @@ import br.rec.alpha.apichamados.model.Problema;
 import br.rec.alpha.apichamados.service.ProblemaService;
 
 @RestController
-@RequestMapping("/problema")
+@RequestMapping("/problema") 
 public class ProblemaRestController {
 	
 	@Autowired

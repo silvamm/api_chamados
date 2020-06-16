@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.rec.alpha.apichamados.dto.ChamadoDto;
+import br.rec.alpha.apichamados.dto.PaginacaoChamadoDto;
 import br.rec.alpha.apichamados.dto.QueryChamadosDto;
 import br.rec.alpha.apichamados.model.Chamado;
 import br.rec.alpha.apichamados.service.ChamadoService;
@@ -32,8 +33,8 @@ public class ChamadoRestController {
 	}
 	
 	@GetMapping("/query")
-	public List<ChamadoDto> listar(@RequestBody QueryChamadosDto query){
-		return service.listAll(query).stream().map(ChamadoDto::new).collect(Collectors.toList());
+	public PaginacaoChamadoDto listar(@RequestBody QueryChamadosDto query){
+		return new PaginacaoChamadoDto(service.listAll(query));
 	}
 	
 	@GetMapping("/{id}")

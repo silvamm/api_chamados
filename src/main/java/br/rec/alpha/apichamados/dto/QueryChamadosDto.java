@@ -12,5 +12,7 @@ public class QueryChamadosDto {
 	private PrioridadeChamadoEnum prioridade;
 	private StatusChamadoEnum status;
 	private Long idSetor;
-	
+	private int pagina;
+	private int limite;
+
 }

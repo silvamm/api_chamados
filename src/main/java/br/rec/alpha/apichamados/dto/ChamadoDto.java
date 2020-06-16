@@ -15,8 +15,7 @@ public class ChamadoDto {
 	private String protocolo;
 	private String descricao;
 	private Problema problema;
-	private StatusChamadoEnum status;
-	private PrioridadeChamadoEnum prioridade;
+	private String status;
 	private LocalDateTime criadoEm;
 	private LocalDateTime encerradoEm;
 	private UsuarioDto criadoPor;
@@ -27,8 +26,7 @@ public class ChamadoDto {
 		this.protocolo = chamado.getProtocolo();
 		this.descricao = chamado.getDescricao();
 		this.problema = chamado.getProblema();
-		this.status = chamado.getStatus();
-		this.prioridade = chamado.getPrioridade();
+		this.status = chamado.getStatus().getNome();
 		this.criadoEm = chamado.getCriadoEm();
 		this.encerradoEm = chamado.getEncerradoEm();
 		this.criadoPor = new UsuarioDto(chamado.getCriadoPor());
