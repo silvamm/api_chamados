@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import lombok.Data;
 

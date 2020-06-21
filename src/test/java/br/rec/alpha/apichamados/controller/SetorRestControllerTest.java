@@ -123,7 +123,7 @@ public class SetorRestControllerTest {
     	
     	setor.setNome("Teste Atualizado");
     	
-		given(service.save(setor)).willReturn(setor);
+		given(service.edit(setor)).willReturn(Optional.of(setor));
 
         mockMvc.perform(
     		RestDocumentationRequestBuilders

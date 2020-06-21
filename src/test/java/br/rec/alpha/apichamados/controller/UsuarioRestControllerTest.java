@@ -157,7 +157,7 @@ public class UsuarioRestControllerTest {
     public void update() throws Exception {
     	
     	usuario.setNome("Teste Atualizado");
-		given(service.save(usuario)).willReturn(usuario);
+		given(service.edit(usuario)).willReturn(Optional.of(usuario));
 
         mockMvc.perform(
     		RestDocumentationRequestBuilders

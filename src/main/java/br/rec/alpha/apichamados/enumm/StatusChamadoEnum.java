@@ -25,6 +25,8 @@ public enum StatusChamadoEnum {
 			if (status.getNome().equals(nome)) 
 				return status;
 		}
+		StatusChamadoEnum status = StatusChamadoEnum.valueOf(nome);
+		if(status != null) return status;
 		throw new IllegalArgumentException();
 	}
 

@@ -19,10 +19,12 @@ public enum TipoUsuarioEnum {
 	
 	@JsonCreator
 	public static TipoUsuarioEnum fromNome(String nome) {
-		for (TipoUsuarioEnum status : TipoUsuarioEnum.values()) {
-			if (status.getNome().equals(nome)) 
-				return status;
+		for (TipoUsuarioEnum tipo : TipoUsuarioEnum.values()) {
+			if (tipo.getNome().equals(nome)) 
+				return tipo;
 		}
+		TipoUsuarioEnum tipo = TipoUsuarioEnum.valueOf(nome);
+		if(tipo != null) return tipo;
 		throw new IllegalArgumentException();
 	}
 

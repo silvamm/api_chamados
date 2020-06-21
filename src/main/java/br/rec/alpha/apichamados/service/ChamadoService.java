@@ -1,6 +1,8 @@
 package br.rec.alpha.apichamados.service;
 
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.*;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import br.rec.alpha.apichamados.dto.ChamadoDto;
-import br.rec.alpha.apichamados.dto.PaginacaoChamadoDto;
 import br.rec.alpha.apichamados.dto.QueryChamadosDto;
-import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import br.rec.alpha.apichamados.model.Chamado;
 import br.rec.alpha.apichamados.model.Setor;

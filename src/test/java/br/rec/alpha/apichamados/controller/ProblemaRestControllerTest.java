@@ -76,6 +76,7 @@ public class ProblemaRestControllerTest {
 		problema = new Problema();
 		problema.setId(1L);
 		problema.setNome("Teste");
+		problema.setAtivo(true);
     	
 		given(service.findById(problema.getId())).willReturn(Optional.of(problema));
 	}
@@ -124,7 +125,7 @@ public class ProblemaRestControllerTest {
     	
     	problema.setNome("Teste Atualizado");
     	
-		given(service.save(problema)).willReturn(problema);
+		given(service.edit(problema)).willReturn(Optional.of(problema));
 
         mockMvc.perform(
     		RestDocumentationRequestBuilders

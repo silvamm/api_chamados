@@ -40,7 +40,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.rec.alpha.apichamados.enumm.PrioridadeChamadoEnum;
 import br.rec.alpha.apichamados.enumm.StatusChamadoEnum;
 import br.rec.alpha.apichamados.model.Chamado;
 import br.rec.alpha.apichamados.model.Problema;
@@ -77,9 +76,8 @@ public class ChamadoRestControllerTest {
 		chamado = new Chamado();
 		chamado.setId(1L);
 		chamado.setCriadoEm(LocalDateTime.now());
-		chamado.setEncerradoEm(LocalDateTime.now());
-		chamado.setDescricao("Descrição");
-		chamado.setProtocolo("Protocolo");
+		chamado.setDescricao("Descricao");
+		chamado.setProtocolo("2020123456789");
 		chamado.setStatus(StatusChamadoEnum.PENDENTE);
 		
 		Problema problema = new Problema();
@@ -96,9 +94,9 @@ public class ChamadoRestControllerTest {
 	private FieldDescriptor[] getDescricaoDosAtributosDoChamado() {
 	    return new FieldDescriptor[]{
 	    			fieldWithPath("id").description("O identificador único do chamado").type(JsonFieldType.NUMBER),
-	                fieldWithPath("criadoEm").description("Data de criacao do chamado").type(JsonFieldType.NUMBER),
-	                fieldWithPath("encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.NUMBER),
-	                fieldWithPath("descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
+	                fieldWithPath("criadoEm").description("Data de criacao do chamado").type(JsonFieldType.STRING),
+	                fieldWithPath("encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING).optional(),
+	                fieldWithPath("descricao").description("A descrição do chamado").type(JsonFieldType.STRING).optional(),
 	                fieldWithPath("protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("status").description("Status do chamado. (PENDENTE, VISUALIZADO, ACEITO, ENCERRADO) ").type(JsonFieldType.STRING),
 	                subsectionWithPath("problema").description("Problema do chamado").type(JsonFieldType.OBJECT),
@@ -110,10 +108,10 @@ public class ChamadoRestControllerTest {
 	    return new FieldDescriptor[]{
 	    			fieldWithPath("[]").description("Lista de Definições").type(JsonFieldType.ARRAY),
 	    			subsectionWithPath("[].id").description("O identificador único do chamado").type(JsonFieldType.NUMBER),
-	    			subsectionWithPath("[].criadoEm").description("Data de criacao do chamado").type(JsonFieldType.NUMBER).optional(),
-	    			subsectionWithPath("[].encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.NUMBER).optional(),
-	    			subsectionWithPath("[].descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
-	    			subsectionWithPath("[].protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].criadoEm").description("Data de criacao do chamado").type(JsonFieldType.STRING),
+	    			subsectionWithPath("[].encerradoEm").description("Data de encerramento do chamado").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].descricao").description("A descrição do chamado").type(JsonFieldType.STRING).optional(),
+	    			subsectionWithPath("[].protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING),
 	    			subsectionWithPath("[].status").description("Status do chamado. (PENDENTE, VISUALIZADO, ACEITO, ENCERRADO) ").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].problema").description("Problema do chamado").type(JsonFieldType.OBJECT),
 	    			subsectionWithPath("[].problema.id").description("O identificar únido do problema do chamado").type(JsonFieldType.NUMBER),
@@ -129,9 +127,9 @@ public class ChamadoRestControllerTest {
 		chamado2.setId(2L);
 		chamado2.setCriadoEm(LocalDateTime.now());
 		chamado2.setEncerradoEm(LocalDateTime.now());
-		chamado2.setDescricao("Descrição");
-		chamado2.setProtocolo("Protocolo");
-		chamado2.setStatus(StatusChamadoEnum.VISUALIZADO);
+		chamado2.setDescricao("Descricao");
+		chamado2.setProtocolo("2020123456789");
+		chamado2.setStatus(StatusChamadoEnum.ENCERRADO);
 		
 		Problema problema = new Problema();
 		problema.setId(1L);
@@ -162,9 +160,9 @@ public class ChamadoRestControllerTest {
     @Test
     public void update() throws Exception {
     	
-    	chamado.setDescricao("Descrição Atualizada");
+    	chamado.setDescricao("Descricao Atualizada");
     	
-		given(service.save(chamado)).willReturn(chamado);
+		given(service.edit(chamado)).willReturn(Optional.of(chamado));
 
         mockMvc.perform(
     		RestDocumentationRequestBuilders
@@ -173,7 +171,7 @@ public class ChamadoRestControllerTest {
                 .content(objectMapper.writeValueAsString(chamado)))
         		.andExpect(status().isOk())
         		.andExpect(jsonPath("$.id", is(1)))
-				.andExpect(jsonPath("$.descricao", is("Descrição Atualizada")))
+				.andExpect(jsonPath("$.descricao", is("Descricao Atualizada")))
 	    		.andExpect(content().contentType("application/json"))
 	    		.andDo(document("chamado/update", 
 	    				preprocessRequest(prettyPrint()),
@@ -183,38 +181,35 @@ public class ChamadoRestControllerTest {
 	@Test
 	public void create() throws JsonProcessingException, Exception {
 		
-		Chamado novoChamado = new Chamado();
-		chamado.setDescricao("Descrição");
-		
 		Problema problema = new Problema();
 		problema.setId(1L);
-		chamado.setProblema(problema);
-		
+
 		Usuario usuario = new Usuario();
 		usuario.setId(1L);
-		chamado.setCriadoPor(usuario);
+		
+		Chamado novo = new Chamado();
+		novo.setDescricao("Descricao");
+		novo.setProblema(problema);
+		novo.setCriadoPor(usuario);
 
 		Chamado salvo = new Chamado();
 		salvo.setId(1L);
 		salvo.setCriadoEm(LocalDateTime.now());
-		salvo.setEncerradoEm(LocalDateTime.now());
-		salvo.setDescricao("Descrição");
-		salvo.setProtocolo("Protocolo");
+		salvo.setDescricao("Descricao");
+		salvo.setProtocolo("2020123456789");
 		salvo.setStatus(StatusChamadoEnum.PENDENTE);
+		salvo.setProblema(problema);
+		salvo.setCriadoPor(usuario);
 		
-		chamado.setProblema(problema);
-		chamado.setCriadoPor(usuario);
-
-		
-		given(service.save(novoChamado)).willReturn(salvo);
+		given(service.save(novo)).willReturn(salvo);
 
 	    mockMvc.perform(
     		RestDocumentationRequestBuilders
 	    		.post("/chamado/").contentType("application/json")
-			    .content(this.objectMapper.writeValueAsString(novoChamado)))
+			    .content(this.objectMapper.writeValueAsString(novo)))
 	    		.andExpect(status().isOk())
 	    		.andExpect(jsonPath("$.id", is(1)))
-				.andExpect(jsonPath("$.descricao", is("Descrição")))
+				.andExpect(jsonPath("$.descricao", is("Descricao")))
 	    		.andExpect(content().contentType("application/json"))
 	    		.andDo(document("chamado/create", 
 	    				preprocessRequest(prettyPrint()),
@@ -230,7 +225,7 @@ public class ChamadoRestControllerTest {
 			.get("/chamado/{id}", 1))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(1)))
-			.andExpect(jsonPath("$.descricao", is("Descrição")))
+			.andExpect(jsonPath("$.descricao", is("Descricao")))
 			.andExpect(content().contentType("application/json"))
 			.andDo(document("chamado/get",
 					preprocessRequest(prettyPrint()),
