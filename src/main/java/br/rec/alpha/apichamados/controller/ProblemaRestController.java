@@ -1,6 +1,7 @@
 package br.rec.alpha.apichamados.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.rec.alpha.apichamados.dto.ProblemaDto;
 import br.rec.alpha.apichamados.model.Problema;
 import br.rec.alpha.apichamados.service.ProblemaService;
 
@@ -24,27 +26,33 @@ public class ProblemaRestController {
 	private ProblemaService service;
 	
 	@GetMapping("/")
-	public List<Problema> listar(){
-		return service.listAll();
+	public List<ProblemaDto> listar(){
+		return service.listAll().stream().map(ProblemaDto::new).collect(Collectors.toList());
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Problema> get(@PathVariable Long id) {
-		return ResponseEntity.of(service.findById(id));
+	public ResponseEntity<ProblemaDto> get(@PathVariable Long id) {
+		return service.findById(id)
+				.map(registro -> {
+					ProblemaDto problemaDto = new ProblemaDto(registro);
+					return ResponseEntity.ok(problemaDto);
+				}).orElse(ResponseEntity.notFound().build());
+		 
 	}
 	
 	@PostMapping("/")
-	public Problema criar(@RequestBody Problema problema) {
-		return service.save(problema);
+	public ProblemaDto criar(@RequestBody Problema problema) {
+		Problema salvo = service.save(problema);
+		ProblemaDto problemaDto = new ProblemaDto(salvo);
+		return problemaDto;
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Problema> editar(@PathVariable Long id, @RequestBody Problema problema) {
-		return service.findById(id)
-				.map(registro -> {
-					problema.setId(registro.getId());
-					Problema atualizado = service.save(problema);
-					return ResponseEntity.ok(atualizado);
+	public ResponseEntity<ProblemaDto> editar(@PathVariable Long id, @RequestBody Problema problema) {
+		return service.edit(problema)
+				.map(editado -> {
+					ProblemaDto editadoDto = new ProblemaDto(editado);
+					return ResponseEntity.ok(editadoDto);
 				}).orElse(ResponseEntity.notFound().build());
 		
 	}

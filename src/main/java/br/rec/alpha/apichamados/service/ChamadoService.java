@@ -40,8 +40,10 @@ public class ChamadoService {
 		
 		Usuario usuario = new Usuario();
 		usuario.setId(query.getIdUsuario());
+		
 		Setor setor = new Setor();
 		setor.setId(query.getIdSetor());
+		
 		usuario.setSetor(setor);
 		
 		Chamado chamado = new Chamado();
@@ -59,6 +61,7 @@ public class ChamadoService {
 		Example<Chamado> example = Example.of(chamado, matcher);
 		
 		Pageable numeroDeRegistroNaPagina = PageRequest.of(query.getPagina(), query.getLimite(), Sort.by(Direction.DESC ,"id"));
+		
 		Page<Chamado> registros = repository.findAll(example, numeroDeRegistroNaPagina);
 		
 		return registros;
@@ -90,7 +93,6 @@ public class ChamadoService {
 		
 		chamado.setCriadoEm(hoje);
 		chamado.setStatus(StatusChamadoEnum.PENDENTE);
-		chamado.setPrioridade(PrioridadeChamadoEnum.NORMAL);
 		
 		return repository.save(chamado);
 	}

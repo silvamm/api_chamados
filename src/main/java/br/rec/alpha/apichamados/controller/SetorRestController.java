@@ -40,11 +40,9 @@ public class SetorRestController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Setor> editar(@PathVariable Long id, @RequestBody Setor setor ){
-		return service.findById(id)
-				.map(registro -> {
-					setor.setId(registro.getId());
-					Setor atualizado = service.save(setor);
-					return ResponseEntity.ok(atualizado);
+		return service.edit(setor)
+				.map(editado -> {
+					return ResponseEntity.ok(editado);
 				}).orElse(ResponseEntity.notFound().build());
 	}
 	

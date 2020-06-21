@@ -81,7 +81,6 @@ public class ChamadoRestControllerTest {
 		chamado.setDescricao("Descrição");
 		chamado.setProtocolo("Protocolo");
 		chamado.setStatus(StatusChamadoEnum.PENDENTE);
-		chamado.setPrioridade(PrioridadeChamadoEnum.NORMAL);
 		
 		Problema problema = new Problema();
 		problema.setId(1L);
@@ -102,7 +101,6 @@ public class ChamadoRestControllerTest {
 	                fieldWithPath("descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING),
 	                fieldWithPath("status").description("Status do chamado. (PENDENTE, VISUALIZADO, ACEITO, ENCERRADO) ").type(JsonFieldType.STRING),
-	                fieldWithPath("prioridade").description("Nivel de prioridade do chamado. (NORMAL, URGENTE) ").type(JsonFieldType.STRING),
 	                subsectionWithPath("problema").description("Problema do chamado").type(JsonFieldType.OBJECT),
 	                subsectionWithPath("criadoPor").description("Usuário que criou o chamado").type(JsonFieldType.OBJECT)
 	    };
@@ -117,7 +115,6 @@ public class ChamadoRestControllerTest {
 	    			subsectionWithPath("[].descricao").description("A descrição do chamado").type(JsonFieldType.STRING),
 	    			subsectionWithPath("[].protocolo").description("O protocolo do chamado").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].status").description("Status do chamado. (PENDENTE, VISUALIZADO, ACEITO, ENCERRADO) ").type(JsonFieldType.STRING).optional(),
-	    			subsectionWithPath("[].prioridade").description("Nivel de prioridade do chamado. (NORMAL, URGENTE) ").type(JsonFieldType.STRING).optional(),
 	    			subsectionWithPath("[].problema").description("Problema do chamado").type(JsonFieldType.OBJECT),
 	    			subsectionWithPath("[].problema.id").description("O identificar únido do problema do chamado").type(JsonFieldType.NUMBER),
 	    			subsectionWithPath("[].criadoPor").description("Usuário que criou o chamado").type(JsonFieldType.OBJECT),
@@ -135,7 +132,6 @@ public class ChamadoRestControllerTest {
 		chamado2.setDescricao("Descrição");
 		chamado2.setProtocolo("Protocolo");
 		chamado2.setStatus(StatusChamadoEnum.VISUALIZADO);
-		chamado2.setPrioridade(PrioridadeChamadoEnum.URGENTE);
 		
 		Problema problema = new Problema();
 		problema.setId(1L);
@@ -205,7 +201,7 @@ public class ChamadoRestControllerTest {
 		salvo.setDescricao("Descrição");
 		salvo.setProtocolo("Protocolo");
 		salvo.setStatus(StatusChamadoEnum.PENDENTE);
-		salvo.setPrioridade(PrioridadeChamadoEnum.NORMAL);
+		
 		chamado.setProblema(problema);
 		chamado.setCriadoPor(usuario);
 

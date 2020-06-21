@@ -24,7 +24,6 @@ public class Chamado {
 	private Problema problema;
 	private String descricao;
 	private StatusChamadoEnum status;
-	private PrioridadeChamadoEnum prioridade;
 	private LocalDateTime criadoEm;
 	private LocalDateTime encerradoEm;
 	@ManyToOne

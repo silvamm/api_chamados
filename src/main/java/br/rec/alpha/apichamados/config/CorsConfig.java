@@ -18,7 +18,7 @@ public class CorsConfig {
 				registry.addMapping("/setor/**").allowedOrigins("*");
 				registry.addMapping("/usuario/**").allowedOrigins("*");
 				registry.addMapping("/chamado/**").allowedOrigins("*");
-				registry.addMapping("/chamadopredefinido/**").allowedOrigins("*");
+				registry.addMapping("/problema/**").allowedOrigins("*");
 			}
 		};
 	}

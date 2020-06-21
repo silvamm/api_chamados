@@ -4,6 +4,7 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +13,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.util.comparator.Comparators;
 
 import br.rec.alpha.apichamados.dto.QueryUsuariosDto;
 import br.rec.alpha.apichamados.model.Setor;
@@ -30,7 +34,7 @@ public class UsuarioService {
 	}
 
 	public List<Usuario> listAll() {
-		return repo.findAll();
+		return repo.findAll(Sort.by(Direction.DESC, "id"));
 	}
 	
 	public List<Usuario> listAll(QueryUsuariosDto query){
@@ -63,8 +67,14 @@ public class UsuarioService {
 				.withMatcher("tipo", exact());
 		
 		example = Example.of(usuario, matcher);
-		resultado.addAll(repo.findAll(example).stream().filter(u -> !resultado.contains(u)).collect(Collectors.toList()));
 		
+		List<Usuario> usuarios = repo.findAll(example)
+				.stream()
+				.filter(u -> !resultado.contains(u))
+				.collect(Collectors.toList());
+		
+		resultado.addAll(usuarios);
+		resultado.sort(Comparator.comparing(Usuario::getId));
 		return resultado;
 	}
 
@@ -79,7 +89,7 @@ public class UsuarioService {
 	public Usuario save(Usuario usuario) {
 
 		if (usuario.getId() != null)
-			return edit(usuario);
+			throw new IllegalArgumentException("O usuário tem id. Use o método edit");
 
 		if (emailJaCadastrado(usuario.getEmail()))
 			throw new IllegalArgumentException("O e-mail já esta cadastrado");
@@ -94,23 +104,25 @@ public class UsuarioService {
 
 	}
 
-	private Usuario edit(Usuario usuario) {
+	public Optional<Usuario> edit(Usuario usuario) {
+		
+		return findById(usuario.getId()).map(registro -> {
+			
+			if (!usuario.getEmail().equals(registro.getEmail()))
+				if (emailJaCadastrado(usuario.getEmail()))
+					throw new IllegalArgumentException("O e-mail já esta cadastrado");
 
-		Usuario usuarioDb = findById(usuario.getId())
-				.orElseThrow(() -> new IllegalArgumentException("O usuário não foi encontrado"));
-
-		if (!usuario.getEmail().equals(usuarioDb.getEmail()))
-			if (emailJaCadastrado(usuario.getEmail()))
-				throw new IllegalArgumentException("O e-mail já esta cadastrado");
-
-		if (usuario.getSenha() != null && !usuario.getSenha().isBlank()) {
-			String encrpyt = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
-			usuario.setSenha(encrpyt);
-		} else {
-			usuario.setSenha(usuarioDb.getSenha());
-		}
-
-		return repo.save(usuario);
+			if (usuario.getSenha() != null && !usuario.getSenha().isBlank()) {
+				String encrpyt = BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt());
+				usuario.setSenha(encrpyt);
+			} else {
+				usuario.setSenha(registro.getSenha());
+			}
+			
+			registro = repo.save(usuario);
+			return Optional.ofNullable(registro);
+			
+		}).orElseGet(() -> Optional.empty());
 
 	}
 

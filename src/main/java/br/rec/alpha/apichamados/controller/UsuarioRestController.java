@@ -54,7 +54,6 @@ public class UsuarioRestController {
 	@PostMapping("/")
 	public ResponseEntity<UsuarioDto> salvar(@RequestBody Usuario usuario){
 		try {
-			usuario.setId(null);
 			Usuario salvo = service.save(usuario);
 			UsuarioDto usuarioDto = new UsuarioDto(salvo);
 			return ResponseEntity.ok(usuarioDto); 
@@ -67,14 +66,11 @@ public class UsuarioRestController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<UsuarioDto> editar(@PathVariable Long id, @RequestBody Usuario usuario) {
-		return service.findById(id)
-		           .map(registro -> {
-		        	   usuario.setId(registro.getId());
-		               Usuario atualizado = service.save(usuario);
-		               UsuarioDto usuarioDto = new UsuarioDto(atualizado);
-		               return ResponseEntity.ok(usuarioDto);
+		return service.edit(usuario)
+		           .map(editado -> {
+		               UsuarioDto editadoDto = new UsuarioDto(editado);
+		               return ResponseEntity.ok(editadoDto);
 		           }).orElse(ResponseEntity.notFound().build());
-		
 	}
 	
 	@DeleteMapping("/{id}")

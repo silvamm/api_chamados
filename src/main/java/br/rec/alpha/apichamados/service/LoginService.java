@@ -20,11 +20,13 @@ public class LoginService {
 		Optional<Usuario> optUsuario = usuarioService.findByEmail(login.getEmail());
 		
 		if(optUsuario.isPresent()) {
+			
 			Usuario usuario = optUsuario.get();
 			boolean senhaCorreta = BCrypt.checkpw(login.getSenha(), usuario.getSenha()); 
-			if (senhaCorreta) {
+			
+			if (senhaCorreta) 
 				return Optional.of(usuario);
-			}
+			
 		}
 		
 		return Optional.empty();

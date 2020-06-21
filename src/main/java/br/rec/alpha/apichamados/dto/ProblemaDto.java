@@ -1,22 +1,23 @@
-package br.rec.alpha.apichamados.model;
+package br.rec.alpha.apichamados.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.rec.alpha.apichamados.model.Problema;
 import lombok.Data;
 
-@Entity
 @Data
-public class Problema {
+public class ProblemaDto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	@Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT TRUE")
-	private boolean ativo;
+	
+	public ProblemaDto(Problema problema) {
+		this.id = problema.getId();
+		this.nome = problema.getNome();
+	}
 
 }

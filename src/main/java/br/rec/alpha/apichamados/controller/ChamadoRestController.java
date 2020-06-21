@@ -28,34 +28,33 @@ public class ChamadoRestController {
 	public ChamadoService service;
 	
 	@GetMapping("/")
-	public List<ChamadoDto> listar(){
+	public List<ChamadoDto> listAll(){
 		return service.listAll().stream().map(ChamadoDto::new).collect(Collectors.toList());
 	}
 	
 	@GetMapping("/query")
-	public PaginacaoChamadoDto listar(@RequestBody QueryChamadosDto query){
+	public PaginacaoChamadoDto listAll(@RequestBody QueryChamadosDto query){
 		return new PaginacaoChamadoDto(service.listAll(query));
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<ChamadoDto> get(@PathVariable Long id) {
-		return service.findById(id)
-				.map(registro -> {
-					ChamadoDto chamadoDto = new ChamadoDto(registro);
-					return ResponseEntity.ok(chamadoDto);
-				}).orElse(ResponseEntity.notFound().build());
+		return service.findById(id).map(registro -> {
+				ChamadoDto chamadoDto = new ChamadoDto(registro);
+				return ResponseEntity.ok(chamadoDto);
+			}).orElse(ResponseEntity.notFound().build());
 		
 	}
 	
 	@PostMapping("/")
-	public ChamadoDto criar(@RequestBody Chamado chamado) {
+	public ChamadoDto create(@RequestBody Chamado chamado) {
 		Chamado salvo = service.save(chamado);
 		ChamadoDto resultado = new ChamadoDto(salvo);
 		return resultado;
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ChamadoDto> editar(@PathVariable Long id, @RequestBody Chamado chamado){
+	public ResponseEntity<ChamadoDto> edit(@PathVariable Long id, @RequestBody Chamado chamado){
 		return service.edit(chamado).map(atualizado -> {
 			ChamadoDto resultado = new ChamadoDto(atualizado);
 			return ResponseEntity.ok(resultado);
